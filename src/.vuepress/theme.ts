@@ -15,7 +15,7 @@ export default hopeTheme({
 
   logo: "/logo.jpg",
   // 仓库链接
-  repo: "hx-docs",
+  repo: "https://github.com/huangxi-184/hx-docs",
 
   docsDir: "src",
 

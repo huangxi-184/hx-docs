@@ -16,6 +16,12 @@ export const zhSidebar = sidebar({
       prefix: "guide/",
       children: "structure",
     },
+    {
+      text: "笔记",
+      icon: "book",
+      prefix: "notes/",
+      children: "structure",
+    },
     "slides",
   ],
 });

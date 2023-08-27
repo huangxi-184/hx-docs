@@ -23,8 +23,25 @@ export const zhNavbar = navbar([
     ],
   },
   {
-    text: "V2 文档",
+    text: "常用文档",
     icon: "book",
-    link: "https://theme-hope.vuejs.press/",
+    prefix: "/docs/",
+    children: [
+      {
+        text: "vuejs",
+        icon: "book",
+        link: "https://cn.vuejs.org/",
+      },
+      {
+        text: "lodash",
+        icon: "book",
+        link: "https://www.lodashjs.com/",
+      },
+      {
+        text: "vuepress",
+        icon: "book",
+        link: "https://theme-hope.vuejs.press/zh/",
+      },
+    ],
   },
 ]);
