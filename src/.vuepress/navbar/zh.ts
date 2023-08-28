@@ -38,7 +38,7 @@ export const zhNavbar = navbar([
         link: "https://www.lodashjs.com/",
       },
       {
-        text: "vuepress",
+        text: "theme-hope",
         icon: "book",
         link: "https://theme-hope.vuejs.press/zh/",
       },

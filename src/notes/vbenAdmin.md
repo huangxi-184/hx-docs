@@ -1,14 +1,16 @@
 ---
 title: Vben Admin i18n国际化实现
+shortTitle: vben 国际化
 icon: fab fa-markdown
-order: 2
+order: 999
 category:
   - 使用指南
 tag:
   - Vben Admin
 ---
 
-1. 打开项目,找到src/settings/localeSetting.ts文件,比如我需要添加一个俄语,就在
+1. 打开项目,找到 src/settings/localeSetting.ts 文件,比如我需要添加一个俄语,就在
+
 ```
 export const LOCALE: { [key: string]: LocaleType } = {
   ZH_CN: 'zh_CN',
@@ -42,14 +44,17 @@ export const localeList: DropMenu[] = [
   }
 ];
 ```
-2. 打开types/config.d.ts 文件,找到
+
+2. 打开 types/config.d.ts 文件,找到
+
 ```
 // 添加你想加入的语言,这里添加ru_RU, 保证ts 类型的正确
 export type LocaleType = 'zh_CN' | 'en' | 'ru_RU' ;
 ```
 
-3.进入src/locales/lang文件夹,添加一个新文件夹ru_RU,内容直接复制一份之前的语言定义的文件,暂时
-这是vben 中语言文件夹结构.
+3.进入 src/locales/lang 文件夹,添加一个新文件夹 ru_RU,内容直接复制一份之前的语言定义的文件,暂时
+这是 vben 中语言文件夹结构.
+
 ```
 # 中文语言
 zh_CN:
@@ -58,9 +63,11 @@ zh_CN:
   routes: 路由菜单相关
   sys: 系统页面相关
 ```
+
 按照原来的,直接改写后面的翻译字段.
 
-4.在src/locales/lang目录下,新建一个ru_RU.ts文件,导入使用组件的国际化翻译,暴露出相关的信息.
+4.在 src/locales/lang 目录下,新建一个 ru_RU.ts 文件,导入使用组件的国际化翻译,暴露出相关的信息.
+
 ```
 import { genMessage } from '../helper';
 import antdLocale from 'ant-design-vue/es/locale/ru_RU';
@@ -79,6 +86,7 @@ export default {
 ```
 
 5. 在语言选择(AppLocalePicker.vue)组件中,添加一个新的节点,并添加事件.切换国际化语言(根据个人项目区别)
+
 ```
 // 新增俄语选择的节点,点击切换
     <label
@@ -89,9 +97,9 @@ export default {
     </label>
 ```
 
-6. 在src/locales/lang目录下,找到你想修改的语言变量,修改好想要添加的语言就行.至此vben国际化基本完成
+6. 在 src/locales/lang 目录下,找到你想修改的语言变量,修改好想要添加的语言就行.至此 vben 国际化基本完成
 
-``` 
+```
 // 举例说明
 export default {
   organization: 'Организационное управление',
@@ -99,6 +107,7 @@ export default {
 ```
 
 7. 使用的方式如下所示
+
 ```
 // 使用官网的方式,不用原生useI18n
 import { useI18n } from '/@/hooks/web/useI18n';
