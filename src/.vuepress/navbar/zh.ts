@@ -67,4 +67,9 @@ export const zhNavbar = navbar([
       },
     ],
   },
+  {
+    text: "其他",
+    icon: "book",
+    children: ["PMS开通账号.md"]
+  },
 ]);
