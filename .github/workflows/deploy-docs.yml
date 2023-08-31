@@ -1,4 +1,3 @@
-
 name: 部署文档
 
 on:
@@ -27,13 +26,11 @@ jobs:
           run_install: true
           version: 8
 
-
       - name: 设置 Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: pnpm
-
 
       - name: 构建文档
         env:
@@ -41,17 +38,17 @@ jobs:
         run: |-
           pnpm run build
 
-       # 命名这个任务为发布Deploy
-    - name: Deploy
-      # 因为构建之后，需要把代码上传到服务器上，所以需要连接到ssh，并且做一个拷贝操作
-      uses: cross-the-world/scp-pipeline@master
-      env:
-        WELCOME: "ssh scp ssh pipelines"
-        LASTSSH: "Doing something after copying"
-      with:
-        host: ${{ secrets.USER_HOST }}
-        user: ${{ secrets.USER_NAME }}
-        pass: ${{ secrets.USER_PASS }}
-        connect_timeout: 60s
-        local: './src/.vuepress/dist/*'
-        remote: /usr/share/nginx/html
+        # 命名这个任务为发布Deploy
+      - name: Deploy
+        # 因为构建之后，需要把代码上传到服务器上，所以需要连接到ssh，并且做一个拷贝操作
+        uses: cross-the-world/scp-pipeline@master
+        env:
+          WELCOME: "ssh scp ssh pipelines"
+          LASTSSH: "Doing something after copying"
+        with:
+          host: ${{ secrets.USER_HOST }}
+          user: ${{ secrets.USER_NAME }}
+          pass: ${{ secrets.USER_PASS }}
+          connect_timeout: 60s
+          local: "./src/.vuepress/dist/*"
+          remote: /usr/share/nginx/html
