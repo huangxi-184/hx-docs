@@ -25,7 +25,7 @@ export const zhNavbar = navbar([
       children: [""]
     },
     {
-      text: "Linux",
+      text: "部署",
       icon: "book",
       prefix: "Linux",
       children: [""]
@@ -70,6 +70,7 @@ export const zhNavbar = navbar([
   {
     text: "其他",
     icon: "book",
+    prefix: "/others/",
     children: ["PMS开通账号.md"]
   },
 ]);
