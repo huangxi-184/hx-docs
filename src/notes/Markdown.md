@@ -2,7 +2,7 @@
 title: Markdown常用语法
 shortTitle: Markdown语法
 icon: fab fa-markdown
-isOriginal: true
+isOriginal: false
 date: 2023-09-01
 order: 1
 category:

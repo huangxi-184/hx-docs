@@ -5,62 +5,67 @@ export const zhNavbar = navbar([
   {
     text: "笔记",
     icon: "book",
-    prefix: "/notes/",
+    prefix: "/notes",
     children: [{
       text: "Android",
       icon: "book",
-      prefix: "Android",
+      prefix: "/Android",
       children: [""]
     },
     {
       text: "dataBase",
       icon: "book",
-      prefix: "dataBase",
+      prefix: "/dataBase",
       children: [""]
     },
     {
       text: "css",
       icon: "book",
-      prefix: "css",
+      prefix: "/css",
       children: [""]
     },
     {
       text: "JavaScript",
       icon: "book",
-      prefix: "JavaScript",
+      prefix: "/JavaScript",
       children: [""]
     },
     {
       text: "vue",
       icon: "book",
-      prefix: "vue",
+      prefix: "/vue",
       children: [""]
     },
     {
       text: "部署",
       icon: "book",
-      prefix: "Linux",
+      prefix: "/Linux",
       children: [""]
     },
     {
       text: "project",
       icon: "book",
-      prefix: "project",
+      prefix: "/project",
       children: [""]
     },
     {
       text: "Python",
       icon: "book",
-      prefix: "Python",
+      prefix: "/Python",
       children: [""]
     },
       "README.md"
     ]
   },
   {
-    text: "常用文档",
+    text: "备忘",
     icon: "book",
-    prefix: "/docs",
+    prefix: "/others/",
+    children: ["PMS开通账号.md"]
+  },
+  {
+    text: "常用链接",
+    icon: "book",
     children: [
       {
         text: "vuejs",
@@ -78,11 +83,5 @@ export const zhNavbar = navbar([
         link: "https://theme-hope.vuejs.press/zh/",
       },
     ],
-  },
-  {
-    text: "其他",
-    icon: "book",
-    prefix: "/others/",
-    children: ["PMS开通账号.md"]
   },
 ]);

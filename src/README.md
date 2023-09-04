@@ -1,20 +1,20 @@
 ---
 home: true
 icon: home
-title: 项目主页
+title: 首页
 heroImage: /4古建筑塔.svg
 bgImage: https://theme-hope-assets.vuejs.press/bg/6-light.svg
 bgImageDark: https://theme-hope-assets.vuejs.press/bg/6-dark.svg
 bgImageStyle:
   background-attachment: fixed
 heroText: 学习笔记
-tagline: 你可以在这里放置或是整个项目的描述。
+tagline: Web和APP开发学习笔记。
 actions:
   - text: 查看笔记 💡
     link: ./notes/
     type: primary
 
-  - text: 文档
+  - text: 备忘
     link: ./others/
 
 highlights:
