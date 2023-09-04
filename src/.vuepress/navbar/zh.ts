@@ -19,9 +19,21 @@ export const zhNavbar = navbar([
       children: [""]
     },
     {
+      text: "css",
+      icon: "book",
+      prefix: "css",
+      children: [""]
+    },
+    {
       text: "JavaScript",
       icon: "book",
       prefix: "JavaScript",
+      children: [""]
+    },
+    {
+      text: "vue",
+      icon: "book",
+      prefix: "vue",
       children: [""]
     },
     {
