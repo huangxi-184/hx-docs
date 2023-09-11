@@ -24,7 +24,7 @@ export *
 
 1. 最外层容器通过是否使用表单来确定 marginTop.`marginTop: getBindValues.useSearchForm ? 0 : 20`
 2. `v-bind="getBindValues"` getBindValues 中的值都会绑定到 table 上面.
-3. 平时配置的列都是放在这个插槽里,遍历每一个列. 然后参数传到 <HeaderCell> 这个组件里,作为表头
+3. 平时配置的列都是放在这个插槽里,遍历每一个列. 然后参数传到`<HeaderCell>`这个组件里,作为表头
 
 ```vue
 <template
