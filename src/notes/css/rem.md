@@ -1,6 +1,6 @@
 ---
-title: rem布局
-shortTitle: rem布局
+title: rem适配处理
+shortTitle: rem适配处理
 icon: fab fa-markdown
 date: 2023-09-01
 order: 2

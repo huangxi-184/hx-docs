@@ -13,7 +13,7 @@ export default hopeTheme({
 
   iconAssets: "fontawesome-with-brands",
 
-  logo: "./public/logo.jpg",
+  logo: "logo.jpg",
   // 仓库链接
   repo: "https://github.com/huangxi-184/hx-docs",
 

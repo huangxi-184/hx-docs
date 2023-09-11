@@ -54,7 +54,7 @@ export const zhNavbar = navbar([
       prefix: "/Python",
       children: [""]
     },
-      "README.md"
+      "/README.md"
     ]
   },
   {

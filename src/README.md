@@ -9,6 +9,7 @@ bgImageStyle:
   background-attachment: fixed
 heroText: 学习笔记
 tagline: Web和APP开发学习笔记。
+
 actions:
   - text: 查看笔记 💡
     link: ./notes/
