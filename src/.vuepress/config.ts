@@ -32,6 +32,6 @@ export default defineUserConfig({
       },
     }),
   ],
-  // templateDev: path.resolve(__dirname, './templates/dev.html'),
+  templateDev: path.resolve(__dirname, './templates/dev.html'),
   // templateBuild: path.resolve(__dirname, './templates/ssr.html')
 });
