@@ -33,7 +33,7 @@ export const zhNavbar = navbar([
     {
       text: "vue",
       icon: "book",
-      prefix: "/vue",
+      prefix: "/Vue",
       children: [""]
     },
     {
