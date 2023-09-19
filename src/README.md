@@ -17,6 +17,9 @@ actions:
     link: ./notes/
     type: primary
 
+  - text: THREE
+    link: ./notes/three
+
   - text: 备忘
     link: ./others/
 
