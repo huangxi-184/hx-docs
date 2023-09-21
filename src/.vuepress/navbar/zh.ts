@@ -31,6 +31,12 @@ export const zhNavbar = navbar([
       children: [""]
     },
     {
+      text: "TypeScript",
+      icon: "book",
+      prefix: "/TypeScript",
+      children: [""]
+    },
+    {
       text: "vue",
       icon: "book",
       prefix: "/Vue",
@@ -76,6 +82,11 @@ export const zhNavbar = navbar([
         text: "lodash",
         icon: "book",
         link: "https://www.lodashjs.com/",
+      },
+      {
+        text: "theme-hope",
+        icon: "book",
+        link: "https://day.js.org/zh-CN/",
       },
       {
         text: "theme-hope",
