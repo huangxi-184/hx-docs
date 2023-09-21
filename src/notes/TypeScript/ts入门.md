@@ -1,3 +1,16 @@
+---
+title: TypeScript
+shortTitle: TypeScript
+icon: fab fa-markdown
+isOriginal: false
+date: 2023-09-21
+order: 1
+category:
+  - TypeScript
+tag:
+  - TypeScript
+---
+
 使用 TypeScript 的第一步. 安装依赖.
 
 `pnpm i -g typescript`
