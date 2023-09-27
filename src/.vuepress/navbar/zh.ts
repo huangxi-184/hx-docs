@@ -84,7 +84,7 @@ export const zhNavbar = navbar([
         link: "https://www.lodashjs.com/",
       },
       {
-        text: "theme-hope",
+        text: "dayjs",
         icon: "book",
         link: "https://day.js.org/zh-CN/",
       },

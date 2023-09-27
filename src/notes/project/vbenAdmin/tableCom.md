@@ -36,8 +36,3 @@ export *
 </template>
 ```
 
-正则匹配全部的`console.log()`
-
-```
-console.log.*$
-```
