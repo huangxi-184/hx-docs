@@ -19,19 +19,14 @@ tag:
 
 `tsc -v`
 
-编译命令:
-`tsc 文件名.ts`
+编译命令: `tsc 文件名.ts`
 
-直接运行方式:
-1: 安装`ts-node`,
-`pnpm i -g ts-node`
+直接运行方式: 1: 安装`ts-node`, `pnpm i -g ts-node`
 
-2.执行命令(方式一)
-`ts-node 文件名.ts`
+2.执行命令(方式一) `ts-node 文件名.ts`
 
-3. 使用 Code Runner 来运行.(方式二)
-   快捷键`Ctrl+Alt+N`
-   若是失败了,需要配置一下 tsconfig.json 文件.最外层添加以下文件即可.
+3. 使用 Code Runner 来运行.(方式二) 快捷键`Ctrl+Alt+N` 若是失败了,需要配置一下 tsconfig.json 文件.最外层添加以下文件即可
+   .
 
 ```json
   "ts-node": {
@@ -68,8 +63,8 @@ let flag: boolean = false;
 let myName: string = "Echo";
 ```
 
-基础类型四五: null,undefined
-是所有类型的子类型,但是不要随意赋值给其他类型. 最好打开 tsconfig.json 文件,将`strictNullChecks`设置为`true`
+基础类型四五: null,undefined 是所有类型的子类型,但是不要随意赋值给其他类型. 最好打开 tsconfig.json 文件,
+将`strictNullChecks`设置为`true`
 
 基础类型六: symbol
 
@@ -84,8 +79,7 @@ let big1: bigint = 10n;
 let big2: bigint = BigInt(10);
 ```
 
-引用类型一: 数组
-虽然可以保存不一样类型的数据,但推荐专数组专用.
+引用类型一: 数组虽然可以保存不一样类型的数据,但推荐专数组专用.
 
 ```ts
 let num: number[] = [1, 2, 3, 4];
@@ -130,8 +124,7 @@ function buildName(firstName: string, lastName: string = "Cat"): string {
 function push(firstNumber: number, ...items: number[]) {}
 ```
 
-函数重载, 就是函数名相同, 但是参数类型不同, 返回值类型也不同.
-多次申明,函数的规则,最后配合联合类型使用.
+函数重载, 就是函数名相同, 但是参数类型不同, 返回值类型也不同. 多次申明,函数的规则,最后配合联合类型使用.
 
 ```ts
 function reverse(x: number): number;
@@ -169,7 +162,7 @@ let person: {
   name: "John",
   age: 25,
   sayHi() {},
-  greet(name) {},
+  greet(name) {}
 };
 ```
 
@@ -209,7 +202,7 @@ enum Direction {
   Up,
   Down,
   Left,
-  Right,
+  Right
 }
 ```
 
