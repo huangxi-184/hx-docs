@@ -17,8 +17,8 @@ actions:
     link: ./notes/
     type: primary
 
-  - text: THREE
-    link: ./notes/three
+  - text: 刷题 💪
+    link: ./notes/Leetcode
 
   - text: 备忘
     link: ./others/
