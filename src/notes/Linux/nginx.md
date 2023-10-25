@@ -27,8 +27,8 @@ tag:
    sudo yum install nginx
    ```
 
-   注:若这里报错--仓库 `appstream` 下载元数据失败 : `Cannot prepare internal mirrorlist: No URLs in mirrorlist`
-   需要使用下面这两句命令
+   注:若这里报错--仓库 `appstream` 下载元数据失败 : `Cannot prepare internal mirrorlist: No URLs in mirrorlist` 需要使用
+   下面这两句命令
 
    ```bash
    sudo sed -i -e "s|mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/CentOS-*
@@ -72,10 +72,26 @@ Nginx 在 CentOS 中的一些重要目录：
 - 日志文件目录：`/var/log/nginx`
 - 主要配置文件：`/etc/nginx/nginx.conf`
 
-安装完成后，你可以在默认的网站根目录中放置网页文件，然后通过访问服务器的 IP 地址或域名来查看网页。要进行更高级的配置，可以编辑主要配置文件和虚拟主机配置文件。
+安装完成后，你可以在默认的网站根目录中放置网页文件，然后通过访问服务器的 IP 地址或域名来查看网页。要进行更高级的配置，可
+以编辑主要配置文件和虚拟主机配置文件。
 
-请注意，具体安装和配置步骤可能会因操作系统版本的不同而略有差异。在进行任何更改之前，建议你备份现有的配置文件以防止意外情况。
+请注意，具体安装和配置步骤可能会因操作系统版本的不同而略有差异。在进行任何更改之前，建议你备份现有的配置文件以防止意外情
+况。
 
 9.开启 https 方式.
 
 上传证书和密钥到服务器上,填写`server_name`,修改`ssl_certificate` `ssl_certificate_key` 字段的路径.重启服务即可.
+
+10. 配置正向代理(如题将 https://huangxi.cc/tianyancha/ 的数据全部转发到https://open.api.tianyancha.com)
+
+    ```nginx
+        location /tianyancha/ {
+        rewrite ^/tianyancha/(.*)$ /services/open/$1 break;
+        proxy_pass https://open.api.tianyancha.com;
+        proxy_set_header Host open.api.tianyancha.com;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Authorization "xxxxxx鉴权token";
+        }
+    ```
