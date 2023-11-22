@@ -88,3 +88,6 @@ if __name__ == "__main__":
     target_directory = "./node_modules"
     delete_directory(target_directory)
 ```
+
+** 注意select的校验规则,必须需要字符串, 不可以是数字**
+** 以后做项目,需要统一成字符标准 **
