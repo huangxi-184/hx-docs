@@ -3,19 +3,27 @@ import { zhNavbar } from "./navbar/index.js";
 import { zhSidebar } from "./sidebar/index.js";
 
 export default hopeTheme({
+  // 域名
   hostname: "https://www.huangxi.cc",
-
+  // 文章显示的默认作者
   author: {
     name: "黄曦",
     url: "https://www.huangxi.cc",
     email: 'huangxi0226@163.com'
   },
+  // darkmode
+  darkmode: "toggle",
+  // 全屏启用
+  fullscreen: true,
 
   iconAssets: "fontawesome-with-brands",
-
+  // 站点图标
   logo: "logo.jpg",
   // 仓库链接
   repo: "https://github.com/huangxi-184/hx-docs",
+
+  // 完成热重启.开启后,白屏时间加长.
+  hotReload: false,
 
   docsDir: "src",
 
@@ -45,7 +53,6 @@ export default hopeTheme({
   },
 
   plugins: {
-    // All features are enabled for demo, only preserve features you need here
     mdEnhance: {
       align: true,
       attrs: true,

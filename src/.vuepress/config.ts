@@ -8,8 +8,12 @@ const __dirname = getDirname(import.meta.url);
 
 export default defineUserConfig({
   base: "/",
+
+  // 单语言设置
   lang: "zh-CN",
+
   theme,
+
   plugins: [
     searchProPlugin({
       // 索引全部内容

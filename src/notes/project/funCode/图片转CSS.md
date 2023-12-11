@@ -11,7 +11,7 @@ tag:
   - CSS
 ---
 
-::: [normal]-demo 图片转CSS
+::: [normal]-demo 图片转 CSS
 
 ```html
 <!DOCTYPE html>
@@ -54,12 +54,7 @@ tag:
       ({ width: cvs.width, height: cvs.height } = img);
       const ctx = cvs.getContext("2d");
       ctx.drawImage(img, 0, 0);
-      const imgPositionInfo = ctx.getImageData(
-        0,
-        0,
-        img.width,
-        img.height
-      ).data;
+      const imgPositionInfo = ctx.getImageData(0, 0, img.width, img.height).data;
       return imgPositionInfo;
     }
 
@@ -73,9 +68,7 @@ tag:
           const G = imgPositionInfo[i * 4 + 1];
           const B = imgPositionInfo[i * 4 + 2];
           const A = imgPositionInfo[i * 4 + 3] / 255;
-          cacheShadowCssFragments.push(
-            `${c + 1}px ${r}px  rgba(${R},${G},${B},${A})`
-          );
+          cacheShadowCssFragments.push(`${c + 1}px ${r}px  rgba(${R},${G},${B},${A})`);
         }
       }
       return cacheShadowCssFragments.join(",");

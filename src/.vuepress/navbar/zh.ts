@@ -3,65 +3,77 @@ import { navbar } from "vuepress-theme-hope";
 export const zhNavbar = navbar([
   "/",
   {
-    text: "笔记",
+    text: "Web前端",
     icon: "book",
     prefix: "/notes",
+    children: [
+      {
+        text: "dataBase",
+        icon: "book",
+        prefix: "/dataBase",
+        children: [""]
+      },
+      {
+        text: "css",
+        icon: "book",
+        prefix: "/css",
+        children: [""]
+      },
+      {
+        text: "JavaScript",
+        icon: "book",
+        prefix: "/JavaScript",
+        children: [""]
+      },
+      {
+        text: "TypeScript",
+        icon: "book",
+        prefix: "/TypeScript",
+        children: [""]
+      },
+      {
+        text: "vue",
+        icon: "book",
+        prefix: "/Vue",
+        children: [""]
+      },
+      {
+        text: "部署",
+        icon: "book",
+        prefix: "/Linux",
+        children: [""]
+      },
+      {
+        text: "project",
+        icon: "book",
+        prefix: "/project",
+        children: [""]
+      },
+      {
+        text: "Python",
+        icon: "book",
+        prefix: "/Python",
+        children: [""]
+      },
+      "/README.md"
+    ]
+  },
+  {
+    text: "客户端",
+    icon: "book",
+    prefix: "/notes/",
     children: [{
       text: "Android",
       icon: "book",
-      prefix: "/Android",
-      children: [""]
-    },
-    {
-      text: "dataBase",
-      icon: "book",
-      prefix: "/dataBase",
-      children: [""]
-    },
-    {
-      text: "css",
-      icon: "book",
-      prefix: "/css",
-      children: [""]
-    },
-    {
-      text: "JavaScript",
-      icon: "book",
-      prefix: "/JavaScript",
-      children: [""]
-    },
-    {
-      text: "TypeScript",
-      icon: "book",
-      prefix: "/TypeScript",
-      children: [""]
-    },
-    {
-      text: "vue",
-      icon: "book",
-      prefix: "/Vue",
-      children: [""]
-    },
-    {
-      text: "部署",
-      icon: "book",
-      prefix: "/Linux",
-      children: [""]
-    },
-    {
-      text: "project",
-      icon: "book",
-      prefix: "/project",
-      children: [""]
-    },
-    {
-      text: "Python",
-      icon: "book",
-      prefix: "/Python",
-      children: [""]
-    },
-      "/README.md"
-    ]
+      prefix: "Android",
+      children: ["/androidbase"]
+    }]
+  },
+  {
+    text: "服务端",
+    icon: "book",
+    prefix: "/others/",
+    children: ["PMS开通账号.md"]
   },
   {
     text: "备忘",
@@ -79,14 +91,14 @@ export const zhNavbar = navbar([
         link: "https://cn.vuejs.org/",
       },
       {
+        text: "spring-boot",
+        icon: "book",
+        link: "https://springref.com/projects/spring-boot",
+      },
+      {
         text: "lodash",
         icon: "book",
         link: "https://www.lodashjs.com/",
-      },
-      {
-        text: "dayjs",
-        icon: "book",
-        link: "https://day.js.org/zh-CN/",
       },
       {
         text: "theme-hope",
