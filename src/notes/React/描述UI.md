@@ -108,6 +108,7 @@ export function Profile() {
 }
 ```
 
+```
 哪里可以使用大括号
 
 用作 JSX 标签内的文本：<h1>{name}'s To Do List</h1> 是有效的，但是 <{tag}>Gregorio Y. Zara's To Do List</{tag}> 无效。
@@ -117,7 +118,7 @@ export function Profile() {
 除了字符串、数字和其它 JavaScript 表达式，你甚至可以在 JSX 中传递对象。对象也用大括号表示，例如 { name: "Hedy Lamarr",
 inventions: 5 }。因此，为了能在 JSX 中传递，你必须用另一对额外的大括号包裹对象
 ：person={{ name: "Hedy Lamarr", inventions: 5 }}。
-
+```
 你可能在 JSX 的内联 CSS 样式中就已经见过这种写法了。React 不要求你使用内联样式（使用 CSS 类就能满足大部分情况）。但是当
 你需要内联样式的时候，你可以给 style 属性传递一个对象：
 
