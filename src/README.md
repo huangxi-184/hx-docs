@@ -14,11 +14,11 @@ tagline: Web和APP开发学习笔记。
 
 actions:
   - text: 查看笔记 💡
-    link: ./notes/
+    link: ./web/
     type: primary
 
   - text: 刷题 💪
-    link: ./notes/Leetcode
+    link: ./algorithm/Leetcode/
 
   - text: 备忘
     link: ./others/

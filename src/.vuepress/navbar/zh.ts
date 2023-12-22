@@ -7,7 +7,6 @@ export const zhNavbar = navbar([
     icon: "book",
     prefix: "/web",
     children: [
-      "/README.md",
       "/git.md",
       "/Markdown.md",
       "/naming-conventions.md",
