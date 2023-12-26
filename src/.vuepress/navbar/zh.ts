@@ -96,7 +96,7 @@ export const zhNavbar = navbar([
     text: "Linux",
     icon: "book",
     prefix: "/Linux",
-    children: ["nginx.md", "pm2.md"]
+    children: ["/nginx.md", "/pm2.md"]
   },
   {
     text: "刷题",
