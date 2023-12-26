@@ -77,7 +77,7 @@ export const zhNavbar = navbar([
       text: "数据库",
       icon: "book",
       prefix: "dataBase/",
-      children: ["sql.md"]
+      children: ["sql.md","quickQuery.md"]
     },
     {
       text: "Java",
