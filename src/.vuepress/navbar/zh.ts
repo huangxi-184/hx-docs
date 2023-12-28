@@ -77,7 +77,7 @@ export const zhNavbar = navbar([
       text: "数据库",
       icon: "book",
       prefix: "dataBase/",
-      children: ["sql.md","quickQuery.md"]
+      children: ["sql.md", "quickQuery.md"]
     },
     {
       text: "Java",
@@ -96,7 +96,7 @@ export const zhNavbar = navbar([
     text: "Linux",
     icon: "book",
     prefix: "/Linux",
-    children: ["/nginx.md", "/pm2.md",'/docker.md']
+    children: ["/nginx.md", "/nginx_use.md", "/pm2.md", '/docker.md']
   },
   {
     text: "刷题",
