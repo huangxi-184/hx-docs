@@ -83,13 +83,22 @@ curl -sSL https://get.daocloud.io/docker | sh
 
    显示本地已经下载的 Docker 镜像列表。
 
-7. **运行容器并进入交互式终端：**
+7. **运行容器**
 
    ```bash
-   docker run -it image_name /bin/bash
+   docker run [Options] image
+   #参数说明
+   --name="名字"           指定容器名字
+   -d                     后台方式运行
+   -it                    使用交互方式运行,进入容器查看内容
+   -p                     指定容器的端口
+   	-p ip:主机端口:容器端口  配置主机端口映射到容器端口
+   	-p 主机端口:容器端口（常用）
+   	-p 容器端口
+   -P                     随机指定端口
+   -e					   环境设置
+   -v					   容器数据卷挂载
    ```
-
-   以交互式模式运行一个容器，并打开一个 Bash 终端。
 
 8. **列出正在运行的容器：**
 
