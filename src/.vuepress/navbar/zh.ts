@@ -56,6 +56,12 @@ export const zhNavbar = navbar([
         prefix: "/Python",
         children: ["/python.md"]
       },
+      {
+        text: "面经",
+        icon: "book",
+        prefix: "/interview",
+        children: ["/01.md","/02.md"]
+      }
     ]
   },
   {

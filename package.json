@@ -7,6 +7,7 @@
   "scripts": {
     "build": "vuepress build src",
     "clean-dev": "vuepress dev src --clean-cache",
+    "delete": "rimraf node_modules",
     "dev": "vuepress dev src",
     "update-package": "pnpm dlx vp-update"
   },

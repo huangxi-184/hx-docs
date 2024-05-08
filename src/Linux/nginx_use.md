@@ -122,3 +122,35 @@ location ^~ /api {
 - fair：按照响应时间来分配，这个需要安装 `nginx-upstream-fair` 插件。
 
 ![Nginx 负载均衡](image-5.png) ![Nginx 负载均衡 Fair](image-6.png)
+
+
+### 使用 nginx 处理跨域
+
+使用 nginx 处理项目部署后的跨域问题
+1. 配置前端项目接口地址
+```sh
+# 在.env.production内，配置接口地址
+VITE_GLOB_API_URL=/api
+```
+
+2.在 nginx 配置请求转发到后台
+
+```sh
+
+server {
+  listen     80;
+  server_name  localhost;
+  # 接口代理，用于解决跨域问题
+  location /api {
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    # 后台接口地址
+    proxy_pass http://localhost:8080/api;
+    proxy_redirect default;
+    add_header Access-Control-Allow-Origin *;
+    add_header Access-Control-Allow-Headers X-Requested-With;
+    add_header Access-Control-Allow-Methods GET,POST,OPTIONS;
+  }
+}  
+```
