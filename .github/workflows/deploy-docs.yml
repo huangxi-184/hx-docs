@@ -3,6 +3,7 @@ name: huangxi-docs
 on:
   push:
     branches:
+      # 确保这是你正在使用的分支名称
       - master
 
 permissions:
@@ -19,31 +20,27 @@ jobs:
           # 如果你文档需要 Git 子模块，取消注释下一行
           # submodules: true
 
-      - name: 设置缓存
-        uses: actions/cache@v3
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v2
         with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
+          run_install: true
+          version: 8
 
       - name: 设置 Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: npm
-
-      - name: 安装依赖
-        run: npm install
+          cache: pnpm
 
       - name: 构建文档
         env:
           NODE_OPTIONS: --max_old_space_size=8192
-        run: npm run build
+        run: |-
+          pnpm run build
 
+        # 命名这个任务为发布Deploy
       - name: Deploy
+        # 因为构建之后，需要把代码上传到服务器上，所以需要连接到ssh，并且做一个拷贝操作
         uses: cross-the-world/scp-pipeline@master
         env:
           WELCOME: 'ssh scp ssh pipelines'
