@@ -56,12 +56,8 @@ export const zhNavbar = navbar([
   },
   {
     text: 'Vercel项目',
-    children: [
-      {
-        text: 'Next-Notes',
-        link: 'https://next-react-notes-six.vercel.app/'
-      }
-    ]
+    prefix: '/iframe',
+    children: ['/next-notes']
   },
   {
     text: '常用链接',
