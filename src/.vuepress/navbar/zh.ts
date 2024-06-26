@@ -119,6 +119,15 @@ export const zhNavbar = navbar([
     children: ['PMS开通账号']
   },
   {
+    text: 'Vercel链接',
+    children: [
+      {
+        text: 'Next-Notes',
+        link: 'https://next-react-notes-six.vercel.app/'
+      },
+    ]
+  },
+  {
     text: '常用链接',
     children: [
       {
