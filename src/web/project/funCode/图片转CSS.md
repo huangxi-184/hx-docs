@@ -11,8 +11,6 @@ tag:
   - CSS
 ---
 
-::: [normal]-demo 图片转 CSS
-
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +22,7 @@ tag:
   </head>
   <body>
     <input type="file" id="upload" />
-    <div id="app"></div>
+    <div id="thisapp"></div>
   </body>
   <script>
     const upload = document.getElementById("upload");
@@ -84,5 +82,3 @@ tag:
   </style>
 </html>
 ```
-
-:::
