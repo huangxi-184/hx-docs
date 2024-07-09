@@ -3,7 +3,7 @@ title: 30 天刷题计划（一）
 shortTitle: 刷题一
 icon: fab fa-markdown
 isOriginal: false
-date: 2023-19-09
+date: 2023-1-09
 order: 1
 category:
   - Leetcode
