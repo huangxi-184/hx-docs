@@ -5,7 +5,7 @@ export const zhNavbar = navbar([
   {
     text: '大前端',
     prefix: '/web',
-    children: ['/axiom', '/Css/', '/JavaScript/', '/Project', '/TypeScript', '/Vue', '/React', '/面经', '/Android']
+    children: ['/axiom', '/Css/', '/JavaScript/', '/Project','/小程序','/TypeScript', '/Vue','/React', '/面经', '/Android']
   },
   {
     text: '服务端',
