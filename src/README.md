@@ -9,8 +9,8 @@ bgImageStyle:
   background-attachment: fixed
   background-repeat: no-repeat
 
-heroText: 学习笔记
-tagline: Web和APP开发学习笔记。
+heroText: Study Notes
+tagline: Web和APP开发笔记。
 
 actions:
   - text: 查看笔记 💡
