@@ -10,7 +10,7 @@ bgImageStyle:
   background-repeat: no-repeat
 
 heroText: Study Notes
-tagline: Web和APP开发笔记。
+tagline: Web和APP笔记。
 
 actions:
   - text: 查看笔记 💡
