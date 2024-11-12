@@ -1,5 +1,6 @@
 ---
 home: true
+# layout: BlogHome
 icon: home
 title: 首页
 bgImage: https://theme-hope-assets.vuejs.press/bg/6-light.svg
