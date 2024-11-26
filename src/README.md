@@ -9,13 +9,16 @@ bgImageStyle:
   background-attachment: fixed
   background-repeat: no-repeat
 
-heroText: Study Notes
+heroText: 学习笔记
 tagline: Web和APP笔记。
 
 actions:
   - text: 查看笔记 💡
     link: ./web/
     type: primary
+
+  - text: ES新特性 💡
+    link: ./web/JavaScript
 
   - text: 刷题 💪
     link: ./algorithm/Leetcode/
