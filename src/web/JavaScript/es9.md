@@ -4,7 +4,7 @@ shortTitle: ES9
 icon: fab fa-markdown
 isOriginal: false
 date: 2023-08-29
-order: -2
+order: 3
 category:
   - JavaScript
 tag:

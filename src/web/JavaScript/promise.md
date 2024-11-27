@@ -3,7 +3,7 @@ title: promise详解
 shortTitle: promise详解
 icon: fab fa-markdown
 date: 2023-09-01
-order: 2
+order: 101
 category:
   - javascript
 tag:
