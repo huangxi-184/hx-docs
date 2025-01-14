@@ -1,34 +1,36 @@
-import { hopeTheme } from "vuepress-theme-hope";
-import { zhNavbar } from "./navbar/index.js";
-import { zhSidebar } from "./sidebar/index.js";
+import { hopeTheme } from 'vuepress-theme-hope';
+import { zhNavbar } from './navbar/index.js';
+import { zhSidebar } from './sidebar/index.js';
 
 export default hopeTheme({
   // 域名
-  hostname: "https://www.huangxi.cc",
+  hostname: 'https://www.huangxi.cc',
   // 文章显示的默认作者
   author: {
-    name: "黄曦",
-    url: "https://www.huangxi.cc",
+    name: '黄曦',
+    url: 'https://www.huangxi.cc',
     email: 'huangxi0226@163.com'
   },
   // darkmode
-  darkmode: "toggle",
+  darkmode: 'toggle',
   // 全屏启用
   fullscreen: true,
+  // 支持打印
+  print: true,
 
-  iconAssets: "fontawesome-with-brands",
+  iconAssets: ['fontawesome-with-brands'],
   // 站点图标
-  logo: "logo.jpg",
+  logo: 'logo.jpg',
   // 仓库链接
-  repo: "https://github.com/huangxi-184/hx-docs",
+  repo: 'https://github.com/huangxi-184/hx-docs',
 
   // 完成热重启.开启后,白屏时间加长.
   hotReload: false,
 
-  docsDir: "src",
+  docsDir: 'src',
 
   locales: {
-    "/": {
+    '/': {
       // navbar
       navbar: zhNavbar,
 
@@ -41,15 +43,15 @@ export default hopeTheme({
 
       // page meta
       metaLocales: {
-        editLink: "在 GitHub 上编辑此页",
-      },
-    },
+        editLink: '在 GitHub 上编辑此页'
+      }
+    }
   },
 
   encrypt: {
     config: {
-      "/demo/encrypt.html": ["1842196429"],
-    },
+      '/demo/encrypt.html': ['1842196429']
+    }
   },
 
   plugins: {
@@ -70,27 +72,27 @@ export default hopeTheme({
       mark: true,
       mermaid: true,
       playground: {
-        presets: ["ts", "vue"],
+        presets: ['ts', 'vue']
       },
-      presentation: ["highlight", "math", "search", "notes", "zoom"],
+      presentation: ['highlight', 'math', 'search', 'notes', 'zoom'],
       stylize: [
         {
-          matcher: "Recommended",
+          matcher: 'Recommended',
           replacer: ({ tag }) => {
-            if (tag === "em")
+            if (tag === 'em')
               return {
-                tag: "Badge",
-                attrs: { type: "tip" },
-                content: "Recommended",
+                tag: 'Badge',
+                attrs: { type: 'tip' },
+                content: 'Recommended'
               };
-          },
-        },
+          }
+        }
       ],
       sub: true,
       sup: true,
       tabs: true,
       vPre: true,
-      vuePlayground: true,
-    },
-  },
+      vuePlayground: true
+    }
+  }
 });
