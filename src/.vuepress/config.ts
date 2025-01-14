@@ -1,16 +1,22 @@
-import { defineUserConfig } from "vuepress";
-import theme from "./theme.js";
-import { searchProPlugin } from "vuepress-plugin-search-pro";
-import { registerComponentsPlugin } from "@vuepress/plugin-register-components"
-import { getDirname, path } from "@vuepress/utils";
+import { defineUserConfig } from 'vuepress';
+import theme from './theme.js';
+import { searchProPlugin } from 'vuepress-plugin-search-pro';
+import { registerComponentsPlugin } from '@vuepress/plugin-register-components';
+import { getDirname, path } from 'vuepress/utils';
+import { viteBundler } from '@vuepress/bundler-vite';
 
 const __dirname = getDirname(import.meta.url);
 
 export default defineUserConfig({
-  base: "/",
+  base: '/',
 
   // 单语言设置
-  lang: "zh-CN",
+  lang: 'zh-CN',
+
+  bundler: viteBundler({
+    viteOptions: {},
+    vuePluginOptions: {}
+  }),
 
   theme,
 
@@ -22,20 +28,20 @@ export default defineUserConfig({
       customFields: [
         {
           getter: (page) => page.frontmatter.category,
-          formatter: "分类：$content",
+          formatter: '分类：$content'
         },
         {
           getter: (page) => page.frontmatter.tag,
-          formatter: "标签：$content",
-        },
-      ],
+          formatter: '标签：$content'
+        }
+      ]
     }),
     registerComponentsPlugin({
       components: {
-        Kanban: path.resolve(__dirname, "./components/Kanban.vue"),
-      },
-    }),
+        Kanban: path.resolve(__dirname, './components/Kanban.vue')
+      }
+    })
   ],
-  templateDev: path.resolve(__dirname, './templates/dev.html'),
+  templateDev: path.resolve(__dirname, './templates/dev.html')
   // templateBuild: path.resolve(__dirname, './templates/ssr.html')
 });
