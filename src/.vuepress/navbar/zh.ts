@@ -70,7 +70,7 @@ export const zhNavbar = navbar([
     children: ['/others/PMS开通账号']
   },
   {
-    text: 'Vercel项目',
+    text: 'iframe嵌入',
     prefix: '/iframe/',
     children: ['/iframe/next-notes']
   },

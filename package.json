@@ -19,7 +19,7 @@
     "vuepress-theme-hope": "2.0.0-rc.67"
   },
   "dependencies": {
-    "@vuepress/bundler-vite": "2.0.0-rc.7",
+    "@vuepress/bundler-vite": "2.0.0-rc.19",
     "rimraf": "^5.0.10",
     "vuepress-plugin-search-pro": "2.0.0-rc.59"
   }

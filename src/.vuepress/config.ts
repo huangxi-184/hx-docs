@@ -27,21 +27,25 @@ export default defineUserConfig({
       // 为分类和标签添加索引
       customFields: [
         {
-          getter: (page) => page.frontmatter.category,
+          getter: (page) => page.frontmatter.category as string,
           formatter: '分类：$content'
         },
         {
-          getter: (page) => page.frontmatter.tag,
+          getter: (page) => page.frontmatter.tag as string,
           formatter: '标签：$content'
         }
       ]
     }),
+
+    // 组件注册
     registerComponentsPlugin({
       components: {
         Kanban: path.resolve(__dirname, './components/Kanban.vue')
       }
     })
   ],
-  templateDev: path.resolve(__dirname, './templates/dev.html')
-  // templateBuild: path.resolve(__dirname, './templates/ssr.html')
+
+  // 构建模板 dev开发 build开发
+  templateDev: path.resolve(__dirname, './templates/dev.html'),
+  templateBuild: path.resolve(__dirname, './templates/ssr.html')
 });
