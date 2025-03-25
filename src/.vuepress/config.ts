@@ -2,8 +2,7 @@ import { defineUserConfig } from 'vuepress';
 import theme from './theme.js';
 import { searchProPlugin } from 'vuepress-plugin-search-pro';
 import { registerComponentsPlugin } from '@vuepress/plugin-register-components';
-import { getDirname, path } from 'vuepress/utils';
-import { viteBundler } from '@vuepress/bundler-vite';
+import { getDirname, path } from '@vuepress/utils';
 
 const __dirname = getDirname(import.meta.url);
 
@@ -12,11 +11,6 @@ export default defineUserConfig({
 
   // 单语言设置
   lang: 'zh-CN',
-
-  bundler: viteBundler({
-    viteOptions: {},
-    vuePluginOptions: {}
-  }),
 
   theme,
 
@@ -36,8 +30,6 @@ export default defineUserConfig({
         }
       ]
     }),
-
-    // 组件注册
     registerComponentsPlugin({
       components: {
         Kanban: path.resolve(__dirname, './components/Kanban.vue')
