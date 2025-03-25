@@ -40,10 +40,9 @@ export default hopeTheme({
       footer: '<a href="https://beian.miit.gov.cn" target="_blank">皖ICP备2023015050号-1</a>',
 
       displayFooter: true,
-
       // page meta
       metaLocales: {
-        editLink: '在 GitHub 上编辑此页'
+        editLink: '有错误请联系小白修改哟~'
       }
     }
   },

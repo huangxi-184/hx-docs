@@ -36,6 +36,8 @@ export default defineUserConfig({
         }
       ]
     }),
+
+    // 组件注册
     registerComponentsPlugin({
       components: {
         Kanban: path.resolve(__dirname, './components/Kanban.vue')
