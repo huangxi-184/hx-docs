@@ -32,7 +32,8 @@ export default defineUserConfig({
     }),
     registerComponentsPlugin({
       components: {
-        Kanban: path.resolve(__dirname, './components/Kanban.vue')
+        Kanban: path.resolve(__dirname, './components/Kanban.vue'),
+        BilibiliAutumn1BannerComponent: path.resolve(__dirname, './components/bilibili-spring-1-banner.component.vue')
       }
     })
   ],
