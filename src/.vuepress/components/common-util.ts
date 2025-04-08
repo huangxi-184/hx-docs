@@ -2,7 +2,7 @@
 export class CommonUtil {
 
 	public static isPhonePointerEvent(): boolean {
-		return 'ontouchmove' in window;
+		return 'ontouchmove' in globalThis;
 	}
 
 	public static randomNum(minNum: number, maxNum: number, decimalNum?: number): number {
