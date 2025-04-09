@@ -33,7 +33,7 @@ jobs:
           cache: pnpm
 
       - name: 安装依赖
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: 构建文档
         env:
@@ -46,6 +46,6 @@ jobs:
           host: ${{ secrets.USER_HOST }}
           user: ${{ secrets.USER_NAME }}
           pass: ${{ secrets.USER_PASS }}
-          connect_timeout: 60s
+          connect_timeout: 120s
           local: './src/.vuepress/dist/*'
           remote: /var/www/html
