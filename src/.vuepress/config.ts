@@ -33,7 +33,8 @@ export default defineUserConfig({
     registerComponentsPlugin({
       components: {
         ShelfLifeCalculator: path.resolve(__dirname, './components/ShelfLifeCalculator.vue'),
-        BilibiliAutumn1BannerComponent: path.resolve(__dirname, './components/bilibili-spring-1-banner.component.vue')
+        BilibiliAutumn1BannerComponent: path.resolve(__dirname, './components/bilibili-spring-1-banner.component.vue'),
+        DataPanel:path.resolve(__dirname, './components/DataPanel.vue')
       }
     })
   ],

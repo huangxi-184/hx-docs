@@ -46,7 +46,8 @@ highlights:
       - title: PWA 支持
         icon: mobile-screen
         details: 网站离线支持,安装后可无网络访问
-
+        
 copyright: false
 footer: <a href="https://beian.miit.gov.cn" target="_blank">皖ICP备2023015050号-1</a>
 ---
+<DataPanel></DataPanel>
