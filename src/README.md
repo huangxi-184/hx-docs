@@ -1,10 +1,9 @@
 ---
 home: true
-# layout: BlogHome
 icon: home
 title: 首页
-bgImage: https://theme-hope-assets.vuejs.press/bg/4-light.svg
-bgImageDark: https://theme-hope-assets.vuejs.press/bg/4-dark.svg
+bgImage: /assets/image/4-light.svg
+bgImageDark: /assets/image/4-dark.svg
 bgImageStyle:
   background-attachment: fixed
   background-repeat: no-repeat
@@ -29,8 +28,8 @@ actions:
 highlights:
   - header: 其他支持
     image: /wechatMiniProgram.jpg
-    bgImage: https://theme-hope-assets.vuejs.press/bg/4-light.svg
-    bgImageDark: https://theme-hope-assets.vuejs.press/bg/4-dark.svg
+    bgImage: /assets/image/4-light.svg
+    bgImageDark: /assets/image/4-dark.svg
     highlights:
       - title: SEO 增强
         icon: dumbbell

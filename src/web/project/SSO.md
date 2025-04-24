@@ -1,3 +1,15 @@
+---
+title: SSO-单点登录
+shortTitle: SSO
+icon: fab fa-markdown
+date: 2024-08-07
+order: 2
+category:
+  - SSO
+tag:
+  - SSO
+---
+
 ``` ts
     /**
      * src/store/modules/user.ts
@@ -34,10 +46,8 @@
             6
           );
         }
-        // await router.replace(PageEnum.PERSONAL_HOMEPAGE)
       } catch (error) {
         return null;
       }
     },
-
 ```

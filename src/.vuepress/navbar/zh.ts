@@ -80,7 +80,7 @@ export const zhNavbar = navbar([
       {
         text: 'theme-hope',
         link: 'https://theme-hope.vuejs.press/zh/'
-      }
+      },
     ]
   }
 ]);
