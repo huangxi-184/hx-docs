@@ -26,7 +26,7 @@ actions:
     link: ./others/
 
 highlights:
-  - header: 其他支持
+  - header: 网站功能
     image: /wechatMiniProgram.jpg
     bgImage: /assets/image/4-light.svg
     bgImageDark: /assets/image/4-dark.svg
@@ -50,6 +50,10 @@ highlights:
 copyright: false
 footer: <a href="https://beian.miit.gov.cn" target="_blank">皖ICP备2023015050号-1</a>
 ---
+<div>
+<BilibiliAutumn1BannerComponent></BilibiliAutumn1BannerComponent>
+</div>
+
 <ClientOnly>
 <DataPanel></DataPanel>
 </ClientOnly>
