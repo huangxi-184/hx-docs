@@ -50,4 +50,6 @@ highlights:
 copyright: false
 footer: <a href="https://beian.miit.gov.cn" target="_blank">皖ICP备2023015050号-1</a>
 ---
+<ClientOnly>
 <DataPanel></DataPanel>
+</ClientOnly>
