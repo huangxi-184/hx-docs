@@ -63,7 +63,7 @@ export const zhNavbar = navbar([
   {
     text: '备忘录',
     prefix: '/others/',
-    children: ['PMS开通账号','保质期计算器','bilibiliBanner']
+    children: ['PMS开通账号', '保质期计算器', 'bilibiliBanner']
   },
   {
     text: 'Vercel项目',
@@ -81,6 +81,10 @@ export const zhNavbar = navbar([
         text: 'theme-hope',
         link: 'https://theme-hope.vuejs.press/zh/'
       },
+      {
+        text: '音乐转化(需刷新一下)',
+        link: '/NcmToMp3.html'
+      }
     ]
   }
 ]);
