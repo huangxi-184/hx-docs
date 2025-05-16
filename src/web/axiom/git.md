@@ -13,7 +13,8 @@ tag:
 ## 分布式版本管理 git 的常用命令
 
 ```powershell
-$env:HTTP_PROXY="http://127.0.0.1:10808/";$env:HTTPS_PROXY="http://127.0.0.1:10808/"
+$env:HTTP_PROXY="http://127.0.0.1:10808/"
+$env:HTTPS_PROXY="http://127.0.0.1:10808/"
 ```
 处理github连接不上的问题,然后`git pull`和`git push`.
 
