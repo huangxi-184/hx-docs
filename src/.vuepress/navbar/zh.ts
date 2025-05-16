@@ -33,14 +33,9 @@ export const zhNavbar = navbar([
         children: ['python']
       },
       {
-        text: 'Koa',
-        prefix: 'Koa/',
-        children: ['Koa']
-      },
-      {
-        text: 'Nest',
-        prefix: 'NestJs/',
-        children: ['nest学习(一)', '全局模块和生命周期', '一网打尽 Nest 全部装饰器']
+        text: '后端基础',
+        prefix: 'Base/',
+        children: ['Koa', 'nest学习(一)', '全局模块和生命周期', '一网打尽 Nest 全部装饰器', 'HTTP缓存详解']
       }
     ]
   },
@@ -63,7 +58,7 @@ export const zhNavbar = navbar([
   {
     text: '备忘录',
     prefix: '/others/',
-    children: ['PMS开通账号', '保质期计算器', 'bilibiliBanner','NcmToMp3']
+    children: ['PMS开通账号', '保质期计算器', 'bilibiliBanner', 'NcmToMp3']
   },
   {
     text: 'Vercel项目',
