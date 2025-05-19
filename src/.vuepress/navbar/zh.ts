@@ -58,7 +58,7 @@ export const zhNavbar = navbar([
   {
     text: '备忘录',
     prefix: '/others/',
-    children: ['PMS开通账号', '保质期计算器', 'bilibiliBanner', 'NcmToMp3']
+    children: ['PMS开通账号', '保质期计算器', 'bilibiliBanner', 'NcmToMp3', '大屏展示']
   },
   {
     text: 'Vercel项目',
