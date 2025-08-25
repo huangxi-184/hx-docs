@@ -39,7 +39,7 @@ jobs:
         env:
           NODE_OPTIONS: --max_old_space_size=8192
         run: pnpm run build
-      # 再试一下
+      # 垃圾action 还要算目录层级 文档也不写
       - name: Deploy
         uses: appleboy/scp-action@v0.1.3
         with:
@@ -48,7 +48,7 @@ jobs:
           password: ${{ secrets.USER_PASS }}
           port: 22
           timeout: 120s
-          strip_components: 1
+          strip_components: 3
           source: "./src/.vuepress/dist/**"
           target: "/var/www/html"
           overwrite: true
