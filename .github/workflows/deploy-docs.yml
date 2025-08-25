@@ -39,7 +39,7 @@ jobs:
         env:
           NODE_OPTIONS: --max_old_space_size=8192
         run: pnpm run build
-
+      # 再试一下
       - name: Deploy
         uses: appleboy/scp-action@v0.1.3
         with:
