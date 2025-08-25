@@ -48,7 +48,7 @@ jobs:
           password: ${{ secrets.USER_PASS }}
           port: 22
           timeout: 120s
-          strip_components: true
+          strip_components: 1
           source: "./src/.vuepress/dist/**"
           target: "/var/www/html"
           overwrite: true
