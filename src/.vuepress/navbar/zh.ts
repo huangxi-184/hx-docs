@@ -30,7 +30,7 @@ export const zhNavbar = navbar([
       {
         text: 'Python',
         prefix: 'Python/',
-        children: ['python']
+        children: ['python', 'init', 'ragflowDeply']
       },
       {
         text: '后端基础',
