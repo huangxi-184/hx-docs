@@ -29,7 +29,13 @@ tag:
 3. 无法读取到远程shell脚本执行的文件
 解决办法如下:
 ```sh
-暂无
+# conda run默认会捕获子进程的输出（包括日志），并可能以非交互式方式运行，导致日志不直接显示在终端。而 conda activate后直接运行命令是在当前 Shell 会话中执行，日志会直接输出。
+# 添加 --no-capture-output参数让 conda run不捕获日志：
+/home/hcs2/miniconda3/condabin/conda run -n vllm --no-capture-output \
+    HF_ENDPOINT=https://hf-mirror.com \
+    HF_HUB_ENDPOINT=https://hf-mirror.com \
+    vllm serve deepseek-ai/DeepSeek-R1-0528-Qwen3-8B \
+    --port 8080 --dtype auto
 ```
 
 4.部署成功后,但是无法从外界访问.需要开通服务器的防火墙端口
@@ -46,3 +52,10 @@ Test-NetConnection -ComputerName 172.31.20.231 -Port 8080
 # 1. 需要部署完成后,自动添加模型到系统列表中.
 # 2. 新增一个模型对话,然后填入对应的测试模型参数,最后得到对话id
 ```
+
+6.它是长时间的部署任务,它部署成功了,脚本也不结束怎么办.
+```sh
+# 暂无
+```
+
+
