@@ -58,4 +58,33 @@ Test-NetConnection -ComputerName 172.31.20.231 -Port 8080
 # 暂无
 ```
 
+7. 输出彩色的ansi的日志信息,怎么显示到web上. 
+8. 
+```tsx
+使用
+import { AnsiUp } from 'ansi_up';
+const ansi_up = new AnsiUp();
+
+function deployLogs() {
+    return (
+        <div style={{
+              color: '#cbd5e0',
+              fontFamily: "'Fira Code', 'Consolas', monospace",
+              whiteSpace: 'pre-wrap',
+              lineHeight: 1.5,
+              margin: 0,
+              height: '600px',
+              overflowY: 'auto',
+            }}
+
+            dangerouslySetInnerHTML={{
+                __html: ansi_up.ansi_to_html(logs.join('')),
+            }}
+          ></div>
+    )
+}
+```
+
+
+
 
