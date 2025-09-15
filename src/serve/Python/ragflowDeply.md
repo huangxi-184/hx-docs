@@ -59,7 +59,6 @@ Test-NetConnection -ComputerName 172.31.20.231 -Port 8080
 ```
 
 7. 输出彩色的ansi的日志信息,怎么显示到web上. 
-8. 
 ```tsx
 使用
 import { AnsiUp } from 'ansi_up';
@@ -85,6 +84,10 @@ function deployLogs() {
 }
 ```
 
-
+### 注意事项:
+1. 查找端口占用 `lsof -i :8080`
+2. 查看显存占用信息 `nvidia-smi`
+3. 查找vLLM占用 `ps aux | grep "vllm serve"`
+4. task_executor_0 reported heartbeat 30S检查一次
 
 
