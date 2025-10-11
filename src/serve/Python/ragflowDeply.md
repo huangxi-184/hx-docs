@@ -90,4 +90,69 @@ function deployLogs() {
 3. 查找vLLM占用 `ps aux | grep "vllm serve"`
 4. task_executor_0 reported heartbeat 30S检查一次
 
+## 代码阅读
 
+### 1. .github/ 文件夹
+项目里的 `.github/` 文件夹是 GitHub 专门保留的目录，用来配置 GitHub 上与仓库相关的自动化、模板和工作流。它不会影响你本地代码的运行，但会影响仓库在 GitHub 上的表现。
+
+### 文件夹常见用途
+
+| 子目录 / 文件               | 功能说明                                                                 |
+|---------------------------|--------------------------------------------------------------------------|
+| workflows/                | 放置 GitHub Actions 工作流文件。比如自动构建、测试、部署、打包、发布到 DockerHub/NPM 等。 |
+|                           | 📄 示例：`.github/workflows/deploy.yml`                                  |
+| ISSUE_TEMPLATE/           | 存放 Issue 模板，让别人提交问题时自动出现固定的格式（比如 bug 描述、复现步骤等）。        |
+| PULL_REQUEST_TEMPLATE.md  | 定义 Pull Request 模板，指导贡献者如何描述他们的更改。                             |
+
+### 2. python的调试
+```json
+// .vscode\launch.json 
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "task_executor",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "justMyCode": true,
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "."
+                }
+            ]
+        },
+        {
+            "name": "ragflow_server",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5679
+            },
+            "justMyCode": true,
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "."
+                }
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Debug All",
+            "configurations": [
+                "task_executor",
+                "ragflow_server"
+            ]
+        }
+    ]
+}
+```
+
+### 3.__file__ 总是指当前模块自身的文件路径，而不是调用它的地方。所以模块被导入时，__file__ 的值就是被导入模块的绝对路径。和导入的地方无关.
