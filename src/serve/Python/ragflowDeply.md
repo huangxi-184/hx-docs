@@ -90,6 +90,157 @@ function deployLogs() {
 3. 查找vLLM占用 `ps aux | grep "vllm serve"`
 4. task_executor_0 reported heartbeat 30S检查一次
 
+
+# 🧩 Tmux 会话管理教程
+
+## 3.1 新建会话
+
+当启动 Tmux 时，第一个窗口的编号是 **0**，第二个是 **1**，以此类推。
+这些窗口对应的会话编号分别为 **0 号会话、1 号会话**。
+
+然而，使用编号区分会话并不直观，因此我们通常会为会话 **起一个名称**：
+
+```bash
+$ tmux new -s <session-name>
+```
+
+示例：
+
+```bash
+$ tmux new -s myproject
+```
+
+> 💡 这样创建的会话名为 `myproject`，方便管理和区分。
+
+---
+
+## 3.2 分离会话
+
+在 Tmux 窗口中，可以按下快捷键 **`Ctrl+b d`** 或执行命令分离当前会话：
+
+```bash
+$ tmux detach
+```
+
+此操作会 **退出当前 Tmux 窗口**，但会话及其运行的进程仍在后台继续运行。
+
+查看所有会话：
+
+```bash
+$ tmux ls
+# 或
+$ tmux list-session
+```
+
+---
+
+## 3.3 接入会话
+
+要重新进入已存在的会话，可以使用：
+
+```bash
+# 使用会话编号
+$ tmux attach -t 0
+
+# 使用会话名称
+$ tmux attach -t <session-name>
+```
+
+示例：
+
+```bash
+$ tmux attach -t myproject
+```
+
+---
+
+## 3.4 杀死会话
+
+要结束某个会话：
+
+```bash
+# 使用会话编号
+$ tmux kill-session -t 0
+
+# 使用会话名称
+$ tmux kill-session -t <session-name>
+```
+
+示例：
+
+```bash
+$ tmux kill-session -t myproject
+```
+
+---
+
+## 3.5 切换会话
+
+当你已经在某个会话中时，可以直接切换到其他会话：
+
+```bash
+# 使用会话编号
+$ tmux switch -t 0
+
+# 使用会话名称
+$ tmux switch -t <session-name>
+```
+
+示例：
+
+```bash
+$ tmux switch -t backend
+```
+
+---
+
+## 3.6 重命名会话
+
+重命名一个会话：
+
+```bash
+$ tmux rename-session -t 0 <new-name>
+```
+
+示例：
+
+```bash
+$ tmux rename-session -t 0 webapi
+```
+
+---
+
+## 3.7 会话快捷键速查表
+
+| 快捷键          | 功能说明                    |
+| :----------- | :---------------------- |
+| **Ctrl+b d** | 分离当前会话（detach）          |
+| **Ctrl+b s** | 列出所有会话（session list）    |
+| **Ctrl+b $** | 重命名当前会话（rename session） |
+
+---
+
+## 🚀 服务器启动指令
+
+以下是项目启动时常用的命令集合：
+
+```bash
+# 设置 HuggingFace 镜像源
+export HF_ENDPOINT=https://hf-mirror.com
+
+# 启用虚拟环境
+source .venv/bin/activate
+
+# 设置 Python 模块搜索路径
+export PYTHONPATH=$(pwd)
+
+# 启动后端服务
+bash docker/launch_backend_service.sh
+```
+
+> ⚙️ 执行以上命令后，后台服务将正常启动。
+
+
 ## 代码阅读
 
 ### 1. .github/ 文件夹
