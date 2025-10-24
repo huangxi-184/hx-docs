@@ -212,10 +212,10 @@ $ tmux rename-session -t 0 webapi
 
 ## 3.7 会话快捷键速查表
 
-| 快捷键          | 功能说明                    |
-| :----------- | :---------------------- |
-| **Ctrl+b d** | 分离当前会话（detach）          |
-| **Ctrl+b s** | 列出所有会话（session list）    |
+| 快捷键       | 功能说明                         |
+| :----------- | :------------------------------- |
+| **Ctrl+b d** | 分离当前会话（detach）           |
+| **Ctrl+b s** | 列出所有会话（session list）     |
 | **Ctrl+b $** | 重命名当前会话（rename session） |
 
 ---
@@ -241,6 +241,34 @@ bash docker/launch_backend_service.sh
 > ⚙️ 执行以上命令后，后台服务将正常启动。
 
 
+当然可以，以下是排版优化后的 **Markdown 版本**👇
+
+
+
+# 🚀 前端项目部署指南
+
+## 🧩 1. 安装依赖并构建项目
+
+```bash
+npm install
+npm run build
+```
+
+## ⚙️ 2. 配置 Nginx
+
+编辑并配置 `nginx.conf` 文件（[nginx.conf](/nginx.conf)）。
+确认 `root` 指向前端构建产物目录（通常为 `dist`）。
+配置完成后，启动 Nginx 即可完成部署。
+
+## 🧹 3. 停止 Nginx 服务
+
+如果需要停止 Nginx，执行以下命令：
+
+```bash
+nginx -s stop
+```
+
+
 ## 代码阅读
 
 ### 1. .github/ 文件夹
@@ -248,12 +276,12 @@ bash docker/launch_backend_service.sh
 
 ### 文件夹常见用途
 
-| 子目录 / 文件               | 功能说明                                                                 |
-|---------------------------|--------------------------------------------------------------------------|
-| workflows/                | 放置 GitHub Actions 工作流文件。比如自动构建、测试、部署、打包、发布到 DockerHub/NPM 等。 |
-|                           | 📄 示例：`.github/workflows/deploy.yml`                                  |
-| ISSUE_TEMPLATE/           | 存放 Issue 模板，让别人提交问题时自动出现固定的格式（比如 bug 描述、复现步骤等）。        |
-| PULL_REQUEST_TEMPLATE.md  | 定义 Pull Request 模板，指导贡献者如何描述他们的更改。                             |
+| 子目录 / 文件            | 功能说明                                                                                  |
+| ------------------------ | ----------------------------------------------------------------------------------------- |
+| workflows/               | 放置 GitHub Actions 工作流文件。比如自动构建、测试、部署、打包、发布到 DockerHub/NPM 等。 |
+|                          | 📄 示例：`.github/workflows/deploy.yml`                                                    |
+| ISSUE_TEMPLATE/          | 存放 Issue 模板，让别人提交问题时自动出现固定的格式（比如 bug 描述、复现步骤等）。        |
+| PULL_REQUEST_TEMPLATE.md | 定义 Pull Request 模板，指导贡献者如何描述他们的更改。                                    |
 
 ### 2. python的调试
 ```json
