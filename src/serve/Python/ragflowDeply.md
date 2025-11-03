@@ -268,6 +268,149 @@ npm run build
 nginx -s stop
 ```
 
+🧩 Gunicorn 服务配置文档
+
+🚀 启动 Shell 脚本
+```sh
+# docker/launch_backend_gunicorn.sh
+#!/bin/bash
+set -e
+
+load_env_file() {
+    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local env_file="$script_dir/.env"
+
+    if [ -f "$env_file" ]; then
+        echo "Loading environment variables from: $env_file"
+        set -a
+        source "$env_file"
+        set +a
+    else
+        echo "Warning: .env file not found at: $env_file"
+    fi
+}
+load_env_file
+
+
+export http_proxy=""; export https_proxy=""; export no_proxy=""; export HTTP_PROXY=""; export HTTPS_PROXY=""; export NO_PROXY=""
+export PYTHONPATH=$(pwd)
+
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
+JEMALLOC_PATH=$(pkg-config --variable=libdir jemalloc)/libjemalloc.so
+
+PY=python3
+
+if [[ -z "$WS" || $WS -lt 1 ]]; then
+  WS=1
+fi
+
+MAX_RETRIES=5
+STOP=false
+PIDS=()
+
+export NLTK_DATA="./nltk_data"
+cleanup() {
+  echo "Termination signal received. Shutting down..."
+  STOP=true
+  for pid in "${PIDS[@]}"; do
+    if kill -0 "$pid" 2>/dev/null; then
+      echo "Killing process $pid"
+      kill "$pid"
+    fi
+  done
+  exit 0
+}
+
+trap cleanup SIGINT SIGTERM
+
+
+task_exe(){
+    local task_id=$1
+    local retry_count=0
+    while ! $STOP && [ $retry_count -lt $MAX_RETRIES ]; do
+        echo "Starting task_executor.py for task $task_id (Attempt $((retry_count+1)))"
+        LD_PRELOAD=$JEMALLOC_PATH $PY rag/svr/task_executor.py "$task_id"
+        EXIT_CODE=$?
+        if [ $EXIT_CODE -eq 0 ]; then
+            echo "task_executor.py for task $task_id exited successfully."
+            break
+        else
+            echo "task_executor.py for task $task_id failed with exit code $EXIT_CODE. Retrying..." >&2
+            retry_count=$((retry_count + 1))
+            sleep 2
+        fi
+    done
+}
+
+for ((i=0;i<WS;i++))
+do
+  task_exe "$i" &
+  PIDS+=($!)
+done
+
+
+echo "Starting Gunicorn server..."
+
+gunicorn -w ${GUNICORN_WORKERS:-1} \
+  -k gthread \
+  --threads 16 \
+  -b 0.0.0.0:${GUNICORN_PORT:-9380} \
+  api.wsgi_entry:app \
+  --timeout 3600 \
+  --log-level warning
+  
+PIDS+=($!)
+
+wait
+```
+
+🧠 WSGI 入口文件
+```py
+# api/wsgi_entry.py
+from rag.utils.redis_conn import RedisDistributedLock
+from api.db.init_data import init_web_data
+from api.db.db_models import init_database_tables as init_web_db
+from api.db.services.document_service import DocumentService
+from api.db.runtime_config import RuntimeConfig
+from api import settings
+from api.apps import app
+import uuid
+import threading
+import time
+import logging
+from api.utils.log_utils import init_root_logger
+from plugin import GlobalPluginManager
+
+
+def update_progress():
+    lock_value = str(uuid.uuid4())
+    redis_lock = RedisDistributedLock(
+        "update_progress", lock_value=lock_value, timeout=60)
+    logging.info(f"update_progress lock_value: {lock_value}")
+    while True:
+        try:
+            if redis_lock.acquire():
+                DocumentService.update_progress()
+                redis_lock.release()
+        except Exception:
+            logging.exception("update_progress exception")
+        time.sleep(6)
+
+
+def init_app():
+    init_root_logger("ragflow_server")
+    settings.init_settings()
+    init_web_db()
+    init_web_data()
+    RuntimeConfig.init_env()
+    RuntimeConfig.init_config(
+        JOB_SERVER_HOST=settings.HOST_IP, HTTP_PORT=settings.HOST_PORT)
+    GlobalPluginManager.load_plugins()
+    threading.Thread(target=update_progress, daemon=True).start()
+    return app
+
+app = init_app()
+```
 
 ## 代码阅读
 
