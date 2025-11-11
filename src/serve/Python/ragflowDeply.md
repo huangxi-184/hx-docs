@@ -219,6 +219,18 @@ $ tmux rename-session -t 0 webapi
 | **Ctrl+b $** | 重命名当前会话（rename session） |
 
 ---
+## 🚀 前端打包迁移指令
+1. 运行以下命令，将前端项目打包：
+
+```bash
+npm run build
+```
+
+1. 运行以下命令，将打包后的文件复制到服务器上：
+
+```bash
+sudo rm -rf /var/www/html/* && sudo cp -r /home/test/llm-source/xychat-ragflow/web/dist/* /var/www/html/
+```
 
 ## 🚀 服务器启动指令
 
