@@ -218,7 +218,9 @@ $ tmux rename-session -t 0 webapi
 | **Ctrl+b s** | 列出所有会话（session list）     |
 | **Ctrl+b $** | 重命名当前会话（rename session） |
 
----
+## Git账号信息
+username: xi.huang@ustchcs.com
+
 ## 🚀 前端打包迁移指令
 1. 运行以下命令，将前端项目打包：
 
