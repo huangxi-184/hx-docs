@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>粒子爱心动画</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #000;
+        touch-action: none;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="heartCanvas"></canvas>
+    <script>
+      // 初始化画布
+      const canvas = document.getElementById("heartCanvas")
+      const ctx = canvas.getContext("2d")
+
+      // 设置画布大小为窗口大小
+      function resizeCanvas() {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+      }
+      window.addEventListener("resize", resizeCanvas)
+      resizeCanvas()
+
+      // 爱心参数
+      const CANVAS_CENTER_X = canvas.width / 2
+      const CANVAS_CENTER_Y = canvas.height / 2
+      const IMAGE_ENLARGE = 11
+      const HEART_COLOR = "pink"
+
+      // 爱心函数
+      function heartFunction(t, shrinkRatio = IMAGE_ENLARGE) {
+        const x = 16 * Math.pow(Math.sin(t), 3)
+        const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))
+
+        // 放大
+        const scaledX = x * shrinkRatio
+        const scaledY = y * shrinkRatio
+
+        // 移到画布中央
+        return {
+          x: scaledX + CANVAS_CENTER_X,
+          y: scaledY + CANVAS_CENTER_Y,
+        }
+      }
+
+      // 随机内部扩散
+      function scatterInside(x, y, beta = 0.15) {
+        const ratioX = -beta * Math.log(Math.random())
+        const ratioY = -beta * Math.log(Math.random())
+
+        const dx = ratioX * (x - CANVAS_CENTER_X)
+        const dy = ratioY * (y - CANVAS_CENTER_Y)
+
+        return {
+          x: x - dx,
+          y: y - dy,
+        }
+      }
+
+      // 抖动
+      function shrink(x, y, ratio) {
+        const force = -1 / Math.pow(Math.pow(x - CANVAS_CENTER_X, 2) + Math.pow(y - CANVAS_CENTER_Y, 2), 0.6)
+        const dx = ratio * force * (x - CANVAS_CENTER_X)
+        const dy = ratio * force * (y - CANVAS_CENTER_Y)
+        return {
+          x: x - dx,
+          y: y - dy,
+        }
+      }
+
+      // 自定义曲线函数
+      function curve(p) {
+        return (4 * (2 * Math.sin(4 * p))) / (2 * Math.PI)
+      }
+
+      // 爱心类
+      class Heart {
+        constructor(generateFrame = 20) {
+          this._points = new Set()
+          this._edgeDiffusionPoints = new Set()
+          this._centerDiffusionPoints = new Set()
+          this.allPoints = {}
+          this.randomHalo = 1000
+          this.generateFrame = generateFrame
+
+          this.build(2000)
+
+          for (let frame = 0; frame < generateFrame; frame++) {
+            this.calc(frame)
+          }
+        }
+
+        build(number) {
+          // 爱心
+          for (let i = 0; i < number; i++) {
+            const t = Math.random() * 2 * Math.PI
+            const { x, y } = heartFunction(t)
+            this._points.add(JSON.stringify([x, y]))
+          }
+
+          // 爱心内扩散
+          const pointsArray = Array.from(this._points).map(JSON.parse)
+          for (const [x, y] of pointsArray) {
+            for (let i = 0; i < 3; i++) {
+              const { x: newX, y: newY } = scatterInside(x, y, 0.05)
+              this._edgeDiffusionPoints.add(JSON.stringify([newX, newY]))
+            }
+          }
+
+          // 爱心内再次扩散
+          for (let i = 0; i < 4000; i++) {
+            const [x, y] = pointsArray[Math.floor(Math.random() * pointsArray.length)]
+            const { x: newX, y: newY } = scatterInside(x, y, 0.17)
+            this._centerDiffusionPoints.add(JSON.stringify([newX, newY]))
+          }
+        }
+
+        static calcPosition(x, y, ratio) {
+          const force = 1 / Math.pow(Math.pow(x - CANVAS_CENTER_X, 2) + Math.pow(y - CANVAS_CENTER_Y, 2), 0.52)
+          const dx = ratio * force * (x - CANVAS_CENTER_X) + (Math.random() * 2 - 1)
+          const dy = ratio * force * (y - CANVAS_CENTER_Y) + (Math.random() * 2 - 1)
+          return {
+            x: x - dx,
+            y: y - dy,
+          }
+        }
+
+        calc(generateFrame) {
+          const ratio = 10 * curve((generateFrame / 10) * Math.PI)
+          const haloRadius = 4 + 6 * (1 + curve((generateFrame / 10) * Math.PI))
+          const haloNumber = 3000 + 4000 * Math.abs(Math.pow(curve((generateFrame / 10) * Math.PI), 2))
+
+          const allPoints = []
+          const heartHaloPoint = new Set()
+
+          // 光环
+          for (let i = 0; i < haloNumber; i++) {
+            const t = Math.random() * 2 * Math.PI
+            let { x, y } = heartFunction(t, 11)
+            ;({ x, y } = shrink(x, y, haloRadius))
+
+            const pointStr = JSON.stringify([x, y])
+            if (!heartHaloPoint.has(pointStr)) {
+              heartHaloPoint.add(pointStr)
+              x += Math.random() * 22 - 11
+              y += Math.random() * 22 - 11
+              const size = [1, 2, 2][Math.floor(Math.random() * 3)]
+              allPoints.push({ x, y, size })
+            }
+          }
+
+          // 轮廓
+          const pointsArray = Array.from(this._points).map(JSON.parse)
+          for (const [x, y] of pointsArray) {
+            const { x: newX, y: newY } = Heart.calcPosition(x, y, ratio)
+            const size = Math.floor(Math.random() * 3) + 1
+            allPoints.push({ x: newX, y: newY, size })
+          }
+
+          // 内容
+          const centerPointsArray = Array.from(this._centerDiffusionPoints).map(JSON.parse)
+          for (const [x, y] of centerPointsArray) {
+            const { x: newX, y: newY } = Heart.calcPosition(x, y, ratio)
+            const size = Math.floor(Math.random() * 2) + 1
+            allPoints.push({ x: newX, y: newY, size })
+          }
+
+          this.allPoints[generateFrame] = allPoints
+        }
+
+        render(renderFrame) {
+          const framePoints = this.allPoints[renderFrame % this.generateFrame]
+          ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+          framePoints.forEach((point) => {
+            ctx.fillStyle = HEART_COLOR
+            ctx.fillRect(point.x, point.y, point.size, point.size)
+          })
+        }
+      }
+
+      // 创建爱心实例
+      const heart = new Heart()
+      let renderFrame = 0
+
+      // 动画循环
+      function animate() {
+        heart.render(renderFrame)
+        renderFrame++
+      }
+
+      // 启动动画
+      setInterval(() => {
+        animate()
+      }, 1000 / 5)
+    </script>
+  </body>
+</html>
