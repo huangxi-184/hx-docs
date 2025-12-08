@@ -8,29 +8,44 @@ tag:
   - 部署
 ---
 
-1. Python使用paramiko库进行远程的SSH代码连接时,服务器上有conda环境,却无法识别对应的指令.
-解决办法如下:
-    直接使用虚拟环境的绝对路径去启动
+# 🚀 AI 部署常见问题与解决方案指南
+
+## 1. Paramiko + Conda 环境指令无法识别
+
+**问题：**
+远程 SSH 命令执行时，Conda 环境无法识别。
+
+**解决：使用 Conda 的绝对路径执行环境命令**
+
 ```sh
-    conda_path = "/home/hcs2/miniconda3/condabin/conda"
-    HF_MIRROR = "https://hf-mirror.com"
-    env_vars = [
-        f"HF_ENDPOINT={HF_MIRROR}",
-        f"HF_HUB_ENDPOINT={HF_MIRROR}"
-    ]
-    env_prefix = " ".join(env_vars) + " "
-    command_parts = [f"{conda_path} run -n vllm {env_prefix} vllm serve {model}"]
+conda_path="/home/hcs2/miniconda3/condabin/conda"
+HF_MIRROR="https://hf-mirror.com"
+
+env_vars=(
+    "HF_ENDPOINT=$HF_MIRROR"
+    "HF_HUB_ENDPOINT=$HF_MIRROR"
+)
+
+env_prefix="$(printf "%s " "${env_vars[@]}")"
+command_parts=(
+    "$conda_path run -n vllm ${env_prefix} vllm serve ${model}"
+)
 ```
 
-2. 部署AI时,需要从HuggingFace下载模型,却无法连接到网络.
-解决办法如下:
-    在拼接shell脚本时,直接拼接上镜像源.修改代码如上
+---
 
-3. 无法读取到远程shell脚本执行的文件
-解决办法如下:
+## 2. HuggingFace 模型下载失败（无网络）
+
+**解决：**
+在 Shell 中直接拼接镜像源环境变量，让 vLLM 拉取模型不再访问官方源。
+
+---
+
+## 3. 无法读取远程 Shell 输出
+
+**解决：** 为 `conda run` 添加 `--no-capture-output`
+
 ```sh
-# conda run默认会捕获子进程的输出（包括日志），并可能以非交互式方式运行，导致日志不直接显示在终端。而 conda activate后直接运行命令是在当前 Shell 会话中执行，日志会直接输出。
-# 添加 --no-capture-output参数让 conda run不捕获日志：
 /home/hcs2/miniconda3/condabin/conda run -n vllm --no-capture-output \
     HF_ENDPOINT=https://hf-mirror.com \
     HF_HUB_ENDPOINT=https://hf-mirror.com \
@@ -38,49 +53,55 @@ tag:
     --port 8080 --dtype auto
 ```
 
-4.部署成功后,但是无法从外界访问.需要开通服务器的防火墙端口
+---
+
+## 4. 部署成功但外部无法访问
+
+**原因：防火墙未放行端口**
+
 ```sh
 sudo ufw allow 8080/tcp
+```
 
-开启后通过powershell执行下面的命令,测试是否成功.
+**PowerShell 测试：**
+
+```powershell
 Test-NetConnection -ComputerName 172.31.20.231 -Port 8080
 ```
 
-5.完成部署后,需要构建对话页,验证是否部署成功.
-```py
-# 有以下问题
-# 1. 需要部署完成后,自动添加模型到系统列表中.
-# 2. 新增一个模型对话,然后填入对应的测试模型参数,最后得到对话id
-```
+---
 
-6.它是长时间的部署任务,它部署成功了,脚本也不结束怎么办.
-```sh
-# 暂无
-```
+## 5. 部署后前端对话页调试
 
-7. 输出彩色的ansi的日志信息,怎么显示到web上. 
+需要解决：
+
+1. 模型部署完成后自动加入系统模型列表
+2. 创建对话会话，写入对应模型参数，并拿到 conversationId
+
+---
+
+## 6. Web 页面显示彩色 ANSI 日志
+
 ```tsx
-使用
 import { AnsiUp } from 'ansi_up';
 const ansi_up = new AnsiUp();
 
 function deployLogs() {
-    return (
-        <div style={{
-              color: '#cbd5e0',
-              fontFamily: "'Fira Code', 'Consolas', monospace",
-              whiteSpace: 'pre-wrap',
-              lineHeight: 1.5,
-              margin: 0,
-              height: '600px',
-              overflowY: 'auto',
-            }}
-
-            dangerouslySetInnerHTML={{
-                __html: ansi_up.ansi_to_html(logs.join('')),
-            }}
-          ></div>
-    )
+  return (
+    <div
+      style={{
+        color: '#cbd5e0',
+        fontFamily: "'Fira Code', 'Consolas', monospace",
+        whiteSpace: 'pre-wrap',
+        lineHeight: 1.5,
+        height: '600px',
+        overflowY: 'auto',
+      }}
+      dangerouslySetInnerHTML={{
+        __html: ansi_up.ansi_to_html(logs.join('')),
+      }}
+    ></div>
+  );
 }
 ```
 
@@ -232,6 +253,8 @@ npm run build
 
 ```bash
 sudo rm -rf /var/www/html/* && sudo cp -r /home/test/llm-source/xychat-ragflow/web/dist/* /var/www/html/
+# 直接打包并与与运行:
+sudo npm run build && sudo rm -rf /var/www/html/* && sudo cp -r /home/test/llm-source/xychat-ragflow/web/dist/* /var/www/html/
 ```
 
 ## 🚀 服务器启动指令
@@ -254,10 +277,184 @@ bash docker/launch_backend_service.sh
 
 > ⚙️ 执行以上命令后，后台服务将正常启动。
 
-
-当然可以，以下是排版优化后的 **Markdown 版本**👇
-
-
+## 🚀 备份智能体表数据并刷新智能体
+```sql
+-- 备份对应的表
+INSERT INTO user_canvas_version_copy1 SELECT
+  *
+FROM
+  user_canvas_version AS src
+WHERE
+  NOT EXISTS (SELECT 1 FROM user_canvas_version_copy1 AS dst WHERE dst.id = src.id);
+  
+-- 备份对应的表
+INSERT INTO user_canvas_copy1 SELECT
+  *
+FROM
+  user_canvas AS src
+WHERE
+  NOT EXISTS (SELECT 1 FROM user_canvas_copy1 AS dst WHERE dst.id = src.id);
+  
+-- 只保留最新的一条user_canvas_version
+DELETE uv
+FROM
+  user_canvas_version uv
+  JOIN user_canvas_version uv2 ON uv.user_canvas_id = uv2.user_canvas_id
+  AND uv.update_time < uv2.update_time;
+  
+-- 刷新操作
+-- 1 代码分析-功能解释
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '代码分析-功能解释' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '代码分析-功能解释';
+  
+-- 2 代码分析-功能理解
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '代码分析-功能理解' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '代码分析-功能理解';
+  
+-- 3 代码分析-代码注释
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '代码分析-代码注释' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '代码分析-代码注释';
+  
+-- 4 代码分析-功能分类
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '代码分析-功能分类' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '代码分析-功能分类';
+  
+-- 5 文本摘要
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '文本摘要' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '文本摘要';
+  
+-- 6 代码缺陷检测
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '代码缺陷检测' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '代码缺陷检测';
+  
+-- 7 文本分类
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '文本分类' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '文本分类';
+  
+-- 8 代码补全
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '代码补全' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '代码补全';
+  
+-- 9 漏洞检测-成因分析
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '漏洞检测-成因分析' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '漏洞检测-成因分析';
+  
+-- 10 代码填空
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '代码填空' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '代码填空';
+  
+-- 11 漏洞检测-位置类型
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '漏洞检测-位置类型' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '漏洞检测-位置类型';
+  
+-- 12 文章生成
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '文章生成' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '文章生成';
+  
+-- 13 事件要素抽取
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '事件要素抽取' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '事件要素抽取';
+  
+-- 14 代码漏洞修复
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '代码漏洞修复' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '代码漏洞修复';
+  
+-- 15 漏洞领域知识问答
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '漏洞领域知识问答' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '漏洞领域知识问答';
+  
+-- 16 命名实体识别
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '命名实体识别' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '命名实体识别';
+  
+-- 17 代码缺陷修复
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '代码缺陷修复' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '代码缺陷修复';
+  
+-- 18 自由问答
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '自由问答' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '自由问答';
+  
+-- 19 代码生成
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '代码生成' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '代码生成';
+  
+-- 20 机器翻译
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '机器翻译' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '机器翻译';
+  
+-- 21 多轮对话
+UPDATE user_canvas AS t
+JOIN (SELECT dsl FROM user_canvas WHERE user_id = '87274cdcd3fd11f0a35be9294ac87ac1' AND title = '多轮对话' LIMIT 1) AS src ON 1 = 1
+SET t.dsl = src.dsl
+WHERE
+  t.title = '多轮对话';
+  
+-- 刷新user_canvas_version
+UPDATE user_canvas_version ucv
+JOIN user_canvas uc ON ucv.user_canvas_id = uc.id
+SET ucv.dsl = uc.dsl
+```
 
 # 🚀 前端项目部署指南
 
