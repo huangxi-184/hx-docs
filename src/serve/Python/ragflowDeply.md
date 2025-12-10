@@ -8,9 +8,49 @@ tag:
   - 部署
 ---
 
-# 🚀 AI 部署常见问题与解决方案指南
+# 🚀 RagFlow 部署完整指南
 
-## 1. Paramiko + Conda 环境指令无法识别
+<RichCardGrid>
+<RichCard title="AI 部署常见问题与解决方案" icon="fas:bug">
+
+解决在部署 AI 模型过程中遇到的常见技术问题，包括环境配置、网络连接、权限设置等。
+
+</RichCard>
+
+<RichCard title="Tmux 会话管理教程" icon="fas:terminal">
+
+详细介绍如何使用 Tmux 管理会话，包括创建、分离、接入、切换和杀死会话的操作方法。
+
+</RichCard>
+
+<RichCard title="前端项目部署指南" icon="fas:desktop">
+
+从前端项目构建到 Nginx 配置的完整部署流程，帮助快速上线前端应用。
+
+</RichCard>
+
+<RichCard title="后端服务配置" icon="fas:server">
+
+介绍后端服务的启动脚本和配置文件，包括 Gunicorn 服务配置和 WSGI 入口文件。
+
+</RichCard>
+
+<RichCard title="数据库操作" icon="fas:database">
+
+提供数据库备份和刷新智能体表的 SQL 脚本，保障数据安全和一致性。
+
+</RichCard>
+
+<RichCard title="开发工具技巧" icon="fas:code">
+
+分享 GitHub 配置、Python 调试和其他实用的开发技巧。
+
+</RichCard>
+</RichCardGrid>
+
+## 🐛 AI 部署常见问题与解决方案指南
+
+### 1. Paramiko + Conda 环境指令无法识别
 
 **问题：**
 远程 SSH 命令执行时，Conda 环境无法识别。
@@ -34,14 +74,14 @@ command_parts=(
 
 ---
 
-## 2. HuggingFace 模型下载失败（无网络）
+### 2. HuggingFace 模型下载失败（无网络）
 
 **解决：**
 在 Shell 中直接拼接镜像源环境变量，让 vLLM 拉取模型不再访问官方源。
 
 ---
 
-## 3. 无法读取远程 Shell 输出
+### 3. 无法读取远程 Shell 输出
 
 **解决：** 为 `conda run` 添加 `--no-capture-output`
 
@@ -55,7 +95,7 @@ command_parts=(
 
 ---
 
-## 4. 部署成功但外部无法访问
+### 4. 部署成功但外部无法访问
 
 **原因：防火墙未放行端口**
 
@@ -71,7 +111,7 @@ Test-NetConnection -ComputerName 172.31.20.231 -Port 8080
 
 ---
 
-## 5. 部署后前端对话页调试
+### 5. 部署后前端对话页调试
 
 需要解决：
 
@@ -80,7 +120,7 @@ Test-NetConnection -ComputerName 172.31.20.231 -Port 8080
 
 ---
 
-## 6. Web 页面显示彩色 ANSI 日志
+### 6. Web 页面显示彩色 ANSI 日志
 
 ```tsx
 import { AnsiUp } from 'ansi_up';
@@ -105,16 +145,15 @@ function deployLogs() {
 }
 ```
 
-### 注意事项:
+#### 注意事项:
 1. 查找端口占用 `lsof -i :8080`
 2. 查看显存占用信息 `nvidia-smi`
 3. 查找vLLM占用 `ps aux | grep "vllm serve"`
 4. task_executor_0 reported heartbeat 30S检查一次
 
+## 🖥️ Tmux 会话管理教程
 
-# 🧩 Tmux 会话管理教程
-
-## 3.1 新建会话
+### 3.1 新建会话
 
 当启动 Tmux 时，第一个窗口的编号是 **0**，第二个是 **1**，以此类推。
 这些窗口对应的会话编号分别为 **0 号会话、1 号会话**。
@@ -135,7 +174,7 @@ $ tmux new -s myproject
 
 ---
 
-## 3.2 分离会话
+### 3.2 分离会话
 
 在 Tmux 窗口中，可以按下快捷键 **`Ctrl+b d`** 或执行命令分离当前会话：
 
@@ -155,7 +194,7 @@ $ tmux list-session
 
 ---
 
-## 3.3 接入会话
+### 3.3 接入会话
 
 要重新进入已存在的会话，可以使用：
 
@@ -175,7 +214,7 @@ $ tmux attach -t myproject
 
 ---
 
-## 3.4 杀死会话
+### 3.4 杀死会话
 
 要结束某个会话：
 
@@ -195,7 +234,7 @@ $ tmux kill-session -t myproject
 
 ---
 
-## 3.5 切换会话
+### 3.5 切换会话
 
 当你已经在某个会话中时，可以直接切换到其他会话：
 
@@ -215,7 +254,7 @@ $ tmux switch -t backend
 
 ---
 
-## 3.6 重命名会话
+### 3.6 重命名会话
 
 重命名一个会话：
 
@@ -231,7 +270,7 @@ $ tmux rename-session -t 0 webapi
 
 ---
 
-## 3.7 会话快捷键速查表
+### 3.7 会话快捷键速查表
 
 | 快捷键       | 功能说明                         |
 | :----------- | :------------------------------- |
@@ -239,17 +278,21 @@ $ tmux rename-session -t 0 webapi
 | **Ctrl+b s** | 列出所有会话（session list）     |
 | **Ctrl+b $** | 重命名当前会话（rename session） |
 
-## Git账号信息
+## 🌐 Git账号信息
 username: xi.huang@ustchcs.com
 
-## 🚀 前端打包迁移指令
-1. 运行以下命令，将前端项目打包：
+## 📦 前端项目部署指南
+
+### 🧩 1. 安装依赖并构建项目
 
 ```bash
+npm install
 npm run build
 ```
 
-1. 运行以下命令，将打包后的文件复制到服务器上：
+### ⚙️ 2. 前端打包迁移指令
+
+运行以下命令，将前端项目打包并复制到服务器上：
 
 ```bash
 sudo rm -rf /var/www/html/* && sudo cp -r /home/test/llm-source/xychat-ragflow/web/dist/* /var/www/html/
@@ -257,7 +300,21 @@ sudo rm -rf /var/www/html/* && sudo cp -r /home/test/llm-source/xychat-ragflow/w
 sudo npm run build && sudo rm -rf /var/www/html/* && sudo cp -r /home/test/llm-source/xychat-ragflow/web/dist/* /var/www/html/
 ```
 
-## 🚀 服务器启动指令
+### ⚙️ 3. 配置 Nginx
+
+编辑并配置 `nginx.conf` 文件（[nginx.conf](/nginx.conf)）。
+确认 `root` 指向前端构建产物目录（通常为 `dist`）。
+配置完成后，启动 Nginx 即可完成部署。
+
+### 🧹 4. 停止 Nginx 服务
+
+如果需要停止 Nginx，执行以下命令：
+
+```bash
+nginx -s stop
+```
+
+## ⚙️ 服务器启动指令
 
 以下是项目启动时常用的命令集合：
 
@@ -277,7 +334,157 @@ bash docker/launch_backend_service.sh
 
 > ⚙️ 执行以上命令后，后台服务将正常启动。
 
-## 🚀 备份智能体表数据并刷新智能体
+## 🧠 后端服务配置
+
+### 🧩 Gunicorn 服务配置文档
+
+#### 🚀 启动 Shell 脚本
+
+```sh
+# docker/launch_backend_gunicorn.sh
+#!/bin/bash
+set -e
+
+load_env_file() {
+    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local env_file="$script_dir/.env"
+
+    if [ -f "$env_file" ]; then
+        echo "Loading environment variables from: $env_file"
+        set -a
+        source "$env_file"
+        set +a
+    else
+        echo "Warning: .env file not found at: $env_file"
+    fi
+}
+load_env_file
+
+
+export http_proxy=""; export https_proxy=""; export no_proxy=""; export HTTP_PROXY=""; export HTTPS_PROXY=""; export NO_PROXY=""
+export PYTHONPATH=$(pwd)
+
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
+JEMALLOC_PATH=$(pkg-config --variable=libdir jemalloc)/libjemalloc.so
+
+PY=python3
+
+if [[ -z "$WS" || $WS -lt 1 ]]; then
+  WS=1
+fi
+
+MAX_RETRIES=5
+STOP=false
+PIDS=()
+
+export NLTK_DATA="./nltk_data"
+cleanup() {
+  echo "Termination signal received. Shutting down..."
+  STOP=true
+  for pid in "${PIDS[@]}"; do
+    if kill -0 "$pid" 2>/dev/null; then
+      echo "Killing process $pid"
+      kill "$pid"
+    fi
+  done
+  exit 0
+}
+
+trap cleanup SIGINT SIGTERM
+
+
+task_exe(){
+    local task_id=$1
+    local retry_count=0
+    while ! $STOP && [ $retry_count -lt $MAX_RETRIES ]; do
+        echo "Starting task_executor.py for task $task_id (Attempt $((retry_count+1)))"
+        LD_PRELOAD=$JEMALLOC_PATH $PY rag/svr/task_executor.py "$task_id"
+        EXIT_CODE=$?
+        if [ $EXIT_CODE -eq 0 ]; then
+            echo "task_executor.py for task $task_id exited successfully."
+            break
+        else
+            echo "task_executor.py for task $task_id failed with exit code $EXIT_CODE. Retrying..." >&2
+            retry_count=$((retry_count + 1))
+            sleep 2
+        fi
+    done
+}
+
+for ((i=0;i<WS;i++))
+do
+  task_exe "$i" &
+  PIDS+=($!)
+done
+
+
+echo "Starting Gunicorn server..."
+
+gunicorn -w ${GUNICORN_WORKERS:-1} \
+  -k gthread \
+  --threads 16 \
+  -b 0.0.0.0:${GUNICORN_PORT:-9380} \
+  api.wsgi_entry:app \
+  --timeout 3600 \
+  --log-level warning
+  
+PIDS+=($!)
+
+wait
+```
+
+#### 🧠 WSGI 入口文件
+
+```py
+# api/wsgi_entry.py
+from rag.utils.redis_conn import RedisDistributedLock
+from api.db.init_data import init_web_data
+from api.db.db_models import init_database_tables as init_web_db
+from api.db.services.document_service import DocumentService
+from api.db.runtime_config import RuntimeConfig
+from api import settings
+from api.apps import app
+import uuid
+import threading
+import time
+import logging
+from api.utils.log_utils import init_root_logger
+from plugin import GlobalPluginManager
+
+
+def update_progress() {
+    lock_value = str(uuid.uuid4())
+    redis_lock = RedisDistributedLock(
+        "update_progress", lock_value=lock_value, timeout=60)
+    logging.info(f"update_progress lock_value: {lock_value}")
+    while True:
+        try:
+            if redis_lock.acquire():
+                DocumentService.update_progress()
+                redis_lock.release()
+        except Exception:
+            logging.exception("update_progress exception")
+        time.sleep(6)
+}
+
+
+def init_app():
+    init_root_logger("ragflow_server")
+    settings.init_settings()
+    init_web_db()
+    init_web_data()
+    RuntimeConfig.init_env()
+    RuntimeConfig.init_config(
+        JOB_SERVER_HOST=settings.HOST_IP, HTTP_PORT=settings.HOST_PORT)
+    GlobalPluginManager.load_plugins()
+    threading.Thread(target=update_progress, daemon=True).start()
+    return app
+
+app = init_app()
+```
+
+## 🗄️ 备份智能体表数据并刷新智能体
+
 ```sql
 -- 备份对应的表
 INSERT INTO user_canvas_version_copy1 SELECT
@@ -456,179 +663,13 @@ JOIN user_canvas uc ON ucv.user_canvas_id = uc.id
 SET ucv.dsl = uc.dsl
 ```
 
-# 🚀 前端项目部署指南
-
-## 🧩 1. 安装依赖并构建项目
-
-```bash
-npm install
-npm run build
-```
-
-## ⚙️ 2. 配置 Nginx
-
-编辑并配置 `nginx.conf` 文件（[nginx.conf](/nginx.conf)）。
-确认 `root` 指向前端构建产物目录（通常为 `dist`）。
-配置完成后，启动 Nginx 即可完成部署。
-
-## 🧹 3. 停止 Nginx 服务
-
-如果需要停止 Nginx，执行以下命令：
-
-```bash
-nginx -s stop
-```
-
-🧩 Gunicorn 服务配置文档
-
-🚀 启动 Shell 脚本
-```sh
-# docker/launch_backend_gunicorn.sh
-#!/bin/bash
-set -e
-
-load_env_file() {
-    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    local env_file="$script_dir/.env"
-
-    if [ -f "$env_file" ]; then
-        echo "Loading environment variables from: $env_file"
-        set -a
-        source "$env_file"
-        set +a
-    else
-        echo "Warning: .env file not found at: $env_file"
-    fi
-}
-load_env_file
-
-
-export http_proxy=""; export https_proxy=""; export no_proxy=""; export HTTP_PROXY=""; export HTTPS_PROXY=""; export NO_PROXY=""
-export PYTHONPATH=$(pwd)
-
-export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
-JEMALLOC_PATH=$(pkg-config --variable=libdir jemalloc)/libjemalloc.so
-
-PY=python3
-
-if [[ -z "$WS" || $WS -lt 1 ]]; then
-  WS=1
-fi
-
-MAX_RETRIES=5
-STOP=false
-PIDS=()
-
-export NLTK_DATA="./nltk_data"
-cleanup() {
-  echo "Termination signal received. Shutting down..."
-  STOP=true
-  for pid in "${PIDS[@]}"; do
-    if kill -0 "$pid" 2>/dev/null; then
-      echo "Killing process $pid"
-      kill "$pid"
-    fi
-  done
-  exit 0
-}
-
-trap cleanup SIGINT SIGTERM
-
-
-task_exe(){
-    local task_id=$1
-    local retry_count=0
-    while ! $STOP && [ $retry_count -lt $MAX_RETRIES ]; do
-        echo "Starting task_executor.py for task $task_id (Attempt $((retry_count+1)))"
-        LD_PRELOAD=$JEMALLOC_PATH $PY rag/svr/task_executor.py "$task_id"
-        EXIT_CODE=$?
-        if [ $EXIT_CODE -eq 0 ]; then
-            echo "task_executor.py for task $task_id exited successfully."
-            break
-        else
-            echo "task_executor.py for task $task_id failed with exit code $EXIT_CODE. Retrying..." >&2
-            retry_count=$((retry_count + 1))
-            sleep 2
-        fi
-    done
-}
-
-for ((i=0;i<WS;i++))
-do
-  task_exe "$i" &
-  PIDS+=($!)
-done
-
-
-echo "Starting Gunicorn server..."
-
-gunicorn -w ${GUNICORN_WORKERS:-1} \
-  -k gthread \
-  --threads 16 \
-  -b 0.0.0.0:${GUNICORN_PORT:-9380} \
-  api.wsgi_entry:app \
-  --timeout 3600 \
-  --log-level warning
-  
-PIDS+=($!)
-
-wait
-```
-
-🧠 WSGI 入口文件
-```py
-# api/wsgi_entry.py
-from rag.utils.redis_conn import RedisDistributedLock
-from api.db.init_data import init_web_data
-from api.db.db_models import init_database_tables as init_web_db
-from api.db.services.document_service import DocumentService
-from api.db.runtime_config import RuntimeConfig
-from api import settings
-from api.apps import app
-import uuid
-import threading
-import time
-import logging
-from api.utils.log_utils import init_root_logger
-from plugin import GlobalPluginManager
-
-
-def update_progress():
-    lock_value = str(uuid.uuid4())
-    redis_lock = RedisDistributedLock(
-        "update_progress", lock_value=lock_value, timeout=60)
-    logging.info(f"update_progress lock_value: {lock_value}")
-    while True:
-        try:
-            if redis_lock.acquire():
-                DocumentService.update_progress()
-                redis_lock.release()
-        except Exception:
-            logging.exception("update_progress exception")
-        time.sleep(6)
-
-
-def init_app():
-    init_root_logger("ragflow_server")
-    settings.init_settings()
-    init_web_db()
-    init_web_data()
-    RuntimeConfig.init_env()
-    RuntimeConfig.init_config(
-        JOB_SERVER_HOST=settings.HOST_IP, HTTP_PORT=settings.HOST_PORT)
-    GlobalPluginManager.load_plugins()
-    threading.Thread(target=update_progress, daemon=True).start()
-    return app
-
-app = init_app()
-```
-
-## 代码阅读
+## 💡 代码阅读
 
 ### 1. .github/ 文件夹
+
 项目里的 `.github/` 文件夹是 GitHub 专门保留的目录，用来配置 GitHub 上与仓库相关的自动化、模板和工作流。它不会影响你本地代码的运行，但会影响仓库在 GitHub 上的表现。
 
-### 文件夹常见用途
+#### 文件夹常见用途
 
 | 子目录 / 文件            | 功能说明                                                                                  |
 | ------------------------ | ----------------------------------------------------------------------------------------- |
@@ -637,7 +678,8 @@ app = init_app()
 | ISSUE_TEMPLATE/          | 存放 Issue 模板，让别人提交问题时自动出现固定的格式（比如 bug 描述、复现步骤等）。        |
 | PULL_REQUEST_TEMPLATE.md | 定义 Pull Request 模板，指导贡献者如何描述他们的更改。                                    |
 
-### 2. python的调试
+### 2. Python 的调试
+
 ```json
 // .vscode\launch.json 
 {
@@ -688,4 +730,6 @@ app = init_app()
 }
 ```
 
-### 3.__file__ 总是指当前模块自身的文件路径，而不是调用它的地方。所以模块被导入时，__file__ 的值就是被导入模块的绝对路径。和导入的地方无关.
+### 3. Python 中的 `__file__` 属性
+
+`__file__` 总是指当前模块自身的文件路径，而不是调用它的地方。所以模块被导入时，`__file__` 的值就是被导入模块的绝对路径。和导入的地方无关。

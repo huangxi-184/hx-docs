@@ -34,8 +34,10 @@ export default defineUserConfig({
       components: {
         ShelfLifeCalculator: path.resolve(__dirname, './components/ShelfLifeCalculator.vue'),
         BilibiliAutumn1BannerComponent: path.resolve(__dirname, './components/bilibili-spring-1-banner.component.vue'),
-        DataPanel:path.resolve(__dirname, './components/DataPanel.vue'),
-        NcmToMp3:path.resolve(__dirname, './components/NcmToMp3.vue')
+        DataPanel: path.resolve(__dirname, './components/DataPanel.vue'),
+        NcmToMp3: path.resolve(__dirname, './components/NcmToMp3.vue'),
+        RichCard: path.resolve(__dirname, './components/RichCard.vue'),
+        RichCardGrid: path.resolve(__dirname, './components/RichCardGrid.vue')
       }
     })
   ],
