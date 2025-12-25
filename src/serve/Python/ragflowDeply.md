@@ -4,6 +4,7 @@ icon: fab fa-markdown
 order: 4
 category:
   - 部署
+  - Rag
 tag:
   - 部署
 ---
