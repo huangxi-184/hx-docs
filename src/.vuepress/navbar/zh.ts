@@ -77,8 +77,8 @@ export const zhNavbar = navbar([
         link: 'https://theme-hope.vuejs.press/zh/'
       },
       {
-        text: '音乐转化(需刷新一下)',
-        link: '/NcmToMp3.html'
+        text: '在线m3u8播放器(需刷新一下)',
+        link: '/m3u8.html'
       }
     ]
   }
