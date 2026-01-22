@@ -7,12 +7,12 @@ export const zhNavbar = navbar([
     prefix: '/web',
     children: [
       '/axiom',
-      '/Css/',
-      '/JavaScript/',
-      '/Project',
+      '/css',
+      '/JavaScript',
+      '/project',
       '/小程序',
       '/TypeScript',
-      '/Vue',
+      '/vue',
       '/React',
       '/面经',
       '/Android'
@@ -77,8 +77,8 @@ export const zhNavbar = navbar([
         link: 'https://theme-hope.vuejs.press/zh/'
       },
       {
-        text: '在线m3u8播放器(需刷新一下)',
-        link: '/m3u8.html'
+        text: '在线m3u8播放器',
+        link: 'https://huangxi.cc:1000/'
       }
     ]
   }

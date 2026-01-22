@@ -26,33 +26,27 @@ actions:
     link: ./others/
 
 highlights:
-  - header: 网站功能
+  - header: 📚 核心功能
+    description: 系统化的知识体系，涵盖多个技术领域
     image: /wechatMiniProgram.jpg
     bgImage: /assets/image/4-light.svg
     bgImageDark: /assets/image/4-dark.svg
     highlights:
-      - title: SEO 增强
-        icon: dumbbell
-        details: 网页将针对搜索引擎进行优化
+      - title: 🌐 前端开发
+        details: HTML、CSS、JavaScript、Vue、React 等前端技术
 
-      - title: Sitemap
-        icon: sitemap
-        details: 为网站生成 Sitemap
+      - title: 💻 后端开发
+        details: Python、Node.js、数据库、服务器配置等
 
-      - title: Feed 支持
-        icon: rss
-        details: 生成你的 Feed，通知用户订阅
+      - title: 🧠 算法学习
+        details: 力扣刷题记录，算法思想总结
 
-      - title: PWA 支持
-        icon: mobile-screen
-        details: 网站离线支持,安装后可无网络访问
+      - title: 🛠️ 运维工具
+        details: Linux、Docker、Nginx 等运维技术
         
 copyright: false
-footer: <a href="https://beian.miit.gov.cn" target="_blank">皖ICP备2023015050号-1</a>
+footer: <a href="https://beian.miit.gov.cn" target="_blank">皖ICP备2023015050号-1</a> |  © 2023 - 2026 小白的学习笔记
 ---
-<div>
-<BilibiliAutumn1BannerComponent></BilibiliAutumn1BannerComponent>
-</div>
 
 <ClientOnly>
 <DataPanel></DataPanel>

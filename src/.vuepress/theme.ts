@@ -20,7 +20,7 @@ export default hopeTheme({
 
   iconAssets: ['fontawesome-with-brands'],
   // 站点图标
-  logo: 'logo.jpg',
+  logo: 'logo.webp',
   // 仓库链接
   repo: 'https://github.com/huangxi-184/hx-docs',
 
