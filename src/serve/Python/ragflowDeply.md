@@ -664,6 +664,36 @@ JOIN user_canvas uc ON ucv.user_canvas_id = uc.id
 SET ucv.dsl = uc.dsl
 ```
 
+### 该模板用于格式化符合 MistralAI 要求的对话输入，支持可选的系统消息，并严格校验角色交替顺序
+
+```jinja
+<!-- 官方mistralai对话模板 -->
+{%- if messages[0]['role'] == 'system' %}
+    {%- set system_message = messages[0]['content'] %}
+    {%- set loop_messages = messages[1:] %}
+{%- else %}
+    {%- set loop_messages = messages %}
+{%- endif %}
+
+{{ bos_token }}
+{%- for message in loop_messages %}
+    {%- if (message['role'] == 'user') != (loop.index0 % 2 == 0) %}
+        {{ raise_exception('After the optional system message, conversation roles must alternate user/assistant/user/assistant/...') }}
+    {%- endif %}
+    {%- if message['role'] == 'user' %}
+        {%- if loop.last and system_message is defined %}
+            {{ '[INST] ' + system_message + '\\n\\n' + message['content'] + ' [/INST]' }}
+        {%- else %}
+            {{ '[INST] ' + message['content'] + ' [/INST]' }}
+        {%- endif %}
+    {%- elif message['role'] == 'assistant' %}
+        {{ ' ' + message['content'] + eos_token }}
+    {%- else %}
+        {{ raise_exception('Only user and assistant roles are supported, with the exception of an initial optional system message!') }}
+    {%- endif %}
+{%- endfor %}
+```
+
 ## 💡 代码阅读
 
 ### 1. .github/ 文件夹
