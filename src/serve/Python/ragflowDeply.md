@@ -152,6 +152,113 @@ function deployLogs() {
 3. 查找vLLM占用 `ps aux | grep "vllm serve"`
 4. task_executor_0 reported heartbeat 30S检查一次
 
+### 7. 修复PPT文件解析问题(ppt,pptx)
+> **适用场景**: RAGFlow 系统中使用 Aspose.Slides 解析 PPT/PPTX 文件时出现进程崩溃问题
+
+---
+
+#### 🚨 报错信息
+
+```bash
+Process terminated. Couldn't find a valid ICU package installed on the system. 
+Set the configuration flag System.Globalization.Invariant to true if you want to run with no globalization support.
+
+at System.Environment.FailFast(System.String)
+at System.Globalization.GlobalizationMode.GetGlobalizationInvariantMode()
+at System.Globalization.GlobalizationMode..cctor()
+# ... (stack trace omitted)
+at Aspose.Slides.Presentation..ctor(System.IO.Stream)
+at WrpNs_Aspose.WrpNs_Slides.WrpCs_Presenta_041D11ED.ctor_002_Presentation(...)
+
+docker/launch_backend_service.sh: line 69: 72449 Aborted (core dumped) $PY api/ragflow_server.py
+```
+
+---
+
+#### 🔍 核心原因分析
+
+| 组件 | 版本/状态 | 说明 |
+|------|----------|------|
+| **Aspose.Slides** | .NET Core 3.1 | PPTX 解析依赖库 |
+| **OpenSSL** | 系统默认 3.0.2 | .NET Core 3.1 仅支持 1.1.x |
+| **兼容性问题** | ❌ 不兼容 | `dlopen` 加载失败导致进程崩溃 |
+
+```mermaid
+graph LR
+    A[PPTX 解析请求] --> B[Aspose.Slides .NET Core 3.1]
+    B --> C[依赖 libssl 1.1.x]
+    D[系统 libssl 3.0.2] --> E[版本冲突]
+    C --> E
+    E --> F[进程崩溃]
+```
+
+---
+
+#### ✅ 解决方案
+
+##### 步骤 1️⃣：下载并安装 libssl 1.1
+
+```bash
+# 创建安装目录
+mkdir -p ./lib_ssl11 && cd ./lib_ssl11
+
+# 下载 libssl 1.1 安装包（清华源）
+wget http://mirrors.tuna.tsinghua.edu.cn/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+
+# 解压到当前目录（不直接安装，避免系统冲突）
+dpkg -x libssl1.1_1.1.1f-1ubuntu2_amd64.deb .
+```
+
+> 📁 解压后关键文件路径：`./usr/lib/x86_64-linux-gnu/libssl.so.1.1`
+
+---
+
+##### 步骤 2️⃣：修改启动脚本 `launch_backend_service.sh`
+
+```bash
+# === 在启动服务前添加以下环境变量 ===
+
+# 优先加载 libssl 1.1（替换为你的实际绝对路径）
+export LD_LIBRARY_PATH="/home/test/llm-source/xychat-ragflow/lib_ssl11/usr/lib/x86_64-linux-gnu:/usr/lib:$LD_LIBRARY_PATH"
+
+# 启用 .NET 全球化不变模式（避免 ICU 依赖）
+export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+
+# === 原有启动命令保持不变 ===
+# $PY api/ragflow_server.py
+```
+
+> ⚠️ **注意**: `LD_LIBRARY_PATH` 请使用**绝对路径**，避免相对路径导致加载失败。
+
+---
+
+##### 步骤 3️⃣：安装 GDI+ 依赖（Aspose 绘图必需）
+
+```bash
+# 安装 libgdiplus（支持 Aspose 的图形渲染）
+apt update && apt install -y libgdiplus
+
+# 刷新动态链接库缓存
+sudo ldconfig
+```
+
+---
+
+#### 🗂️ 目录结构参考
+
+```
+xychat-ragflow/
+├── lib_ssl11/
+│   └── usr/
+│       └── lib/x86_64-linux-gnu/
+│           ├── libssl.so.1.1
+│           └── libcrypto.so.1.1
+├── docker/
+│   └── launch_backend_service.sh  # 已修改环境变量
+└── api/
+    └── ragflow_server.py
+```
+
 ## 🖥️ Tmux 会话管理教程
 
 ### 3.1 新建会话
