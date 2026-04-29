@@ -152,7 +152,7 @@ sudo systemctl stop nginx
 2. 查看**模型部署**界面（系统已预设 XingYun-Vul-72B 和 XingYun-72B 模型部署参数）
 3. 点击**部署模型**按钮完成部署（再次点击可停止部署释放资源）
 
-![模型部署界面](image/image-28.png)
+![模型部署界面](Image/image-28.png)
 
 > **注意事项**:
 > - XingYun-Vul-72B 和 XingYun-72B 模型部署参数未做鉴权设置
@@ -172,12 +172,12 @@ sudo systemctl stop nginx
    - **API-Key**: 根据部署时是否设置填写（未设置则留空）
    - **最大 token 数**: 根据需求设置
 
-![vLLM 模型配置](image/image-16.png)
-![模型配置参数](image/image-29.png)
+![vLLM 模型配置](Image/image-16.png)
+![模型配置参数](Image/image-29.png)
 
 5. 点击**设置默认模型**，选择聊天模型并确定
 
-![设置默认模型](image/image-17.png)
+![设置默认模型](Image/image-17.png)
 
 > 💡 用户也可配置其他供应商的模型，找到对应产品并填写所需参数即可
 
@@ -198,7 +198,7 @@ sudo systemctl stop nginx
 3. 选择系统内置切片方法，点击保存
 4. 上传文件并点击解析按钮完成解析
 
-![知识库管理](image/image-18.png)
+![知识库管理](Image/image-18.png)
 
 > ⚠️ 文件需解析完成后才能具备对应知识
 
@@ -214,11 +214,11 @@ sudo systemctl stop nginx
 - **知识库设置**: 添加知识库索引（若不需要，需删除系统提示词中的 `{knowledge}` 及变量）
 - **模型设置**: 选择聊天模型，设置温度值
 
-![聊天基础设置](image/image-19.png)
+![聊天基础设置](Image/image-19.png)
 
 **开始对话**: 点击左侧"+"按钮创建聊天会话
 
-![创建聊天会话](image/image-20.png)
+![创建聊天会话](Image/image-20.png)
 
 #### 3. 🤖 智能体聊天
 
@@ -226,7 +226,7 @@ sudo systemctl stop nginx
 
 **路径**: 主页面 → 智能体 → 点击对应智能体名称右下角按钮进入
 
-![智能体聊天](image/image-21.png)
+![智能体聊天](Image/image-21.png)
 
 #### 4. 🔍 代码分析
 
@@ -237,14 +237,14 @@ sudo systemctl stop nginx
 2. 填写项目名称、简称，类型选择**源码项目**
 3. 上传待分析的文件压缩包
 
-![代码分析项目配置](image/image-22.png)
+![代码分析项目配置](Image/image-22.png)
 
 **4.2 分析器配置**
 1. 选择**分析器配置** → 点击**创建分析器**
 2. 填写分析器名称、对应项目名称
 3. 选择分析模型、代码源类型和线程数
 
-![分析器配置](image/image-23.png)
+![分析器配置](Image/image-23.png)
 
 **4.3 执行分析**
 1. 选择**代码分析** → 点击**创建分析任务**
@@ -254,7 +254,7 @@ sudo systemctl stop nginx
    - **问题列表**: 查看问题列表
    - **分析结果**: 所有问题结果一览
 
-![代码分析任务](image/image-24.png)
+![代码分析任务](Image/image-24.png)
 
 #### 5. 🏷️ 代码标注
 
@@ -262,7 +262,7 @@ sudo systemctl stop nginx
 
 **5.1 项目配置**（同代码分析）
 
-![代码标注项目配置](image/image-22.png)
+![代码标注项目配置](Image/image-22.png)
 
 **5.2 创建标注任务**
 1. 点击**创建标注任务**
@@ -274,7 +274,7 @@ sudo systemctl stop nginx
    - **编辑**: 编辑任务
    - **删除**: 删除任务
 
-![创建标注任务](image/image-25.png)
+![创建标注任务](Image/image-25.png)
 
 **5.3 标注操作**
 1. 点击**标注**进入标注工具页面
@@ -283,7 +283,7 @@ sudo systemctl stop nginx
 4. 右侧创建临时代码段表格
 5. 选择**人工标注**或**AI 辅助标注**进行标注
 
-![标注工具界面](image/image-26.png)
+![标注工具界面](Image/image-26.png)
 
 > 📝 **若项目类型为"数据集项目"**:
 > - 左侧：漏洞数据集中的全部漏洞代码文件
@@ -297,7 +297,7 @@ sudo systemctl stop nginx
 3. 点击**导出模板**，选择导出类型和模板
 4. 数据将导出到**模型微调评估 → 数据集管理**
 
-![训练数据导出](image/image-27.png)
+![训练数据导出](Image/image-27.png)
 
 ### 三、模型训练案例
 
@@ -315,7 +315,7 @@ sudo systemctl stop nginx
 
 **2.1 标准训练数据集格式选择**
 用于监督微调的数据集需要转化为本系统支持的标准数据集格式。本系统支持的标准数据集格式包括Messages格式、System/Query/Response格式、System/Instruction/Input/Output格式和简易格式（system/user/assistant），用户可通过在系统`微调评估`->`数据集管理`页面下，点击`导入数据集`，下载并查看系统支持的标准数据集格式详细信息：
-![导入数据集](image/image-4.png)
+![导入数据集](Image/image-4.png)
 
 在本样例中，我们选择Messages格式，即需将原始数据集parquet文件转换为messages格式的jsonl文件。messages格式是本系统推荐使用的标准数据集格式，其模板如下所示：
 
@@ -341,7 +341,7 @@ sudo systemctl stop nginx
 **2.2 标准训练数据集格式转换**
 2.2.1 原始数据集内容查看
 huggingface中的数据集，在其Data Studio中可以直接查看数据内容，本样例中，原始数据集内容如下：
-![alt text](image/image-3.png)
+![alt text](Image/image-3.png)
 在原始数据集中每一条数据包含`key`、`prompt`和`completion`三个字段，重点为`prompt`和`completion`字段。
 
 `prompt`字段：
@@ -461,7 +461,7 @@ python process.py train-00000-of-00001.parquet
 
 在**模型训练模块**中创建训练任务OpenVul，点击**训练配置**图标进入配置页面。
 
-![训练配置入口](image/image-5.png)
+![训练配置入口](Image/image-5.png)
 
 ##### 4.2 配置训练参数
 
@@ -469,10 +469,10 @@ python process.py train-00000-of-00001.parquet
 
 本案例使用的训练参数配置如下图所示：
 
-![训练配置 1](image/image-6.png)
-![训练配置 2](image/image-7.png)
-![训练配置 3](image/image-8.png)
-![训练配置 4](image/image-9.png)
+![训练配置 1](Image/image-6.png)
+![训练配置 2](Image/image-7.png)
+![训练配置 3](Image/image-8.png)
+![训练配置 4](Image/image-9.png)
 
 
 以下训练参数配置旨在快速跑通训练流程进行演示，各项参数均以“快速运行”为首要目标，并未追求模型最佳效果，以下是本样例中参数配置说明：
@@ -542,7 +542,7 @@ python process.py train-00000-of-00001.parquet
 ##### 4.3启动训练与监控
 完成配置后启动训练任务，通过**训练图表**实时监控训练过程。训练结束后，从生成的检查点中选择**表现最优版本**。
 
-![训练监控](image/image-10.png)
+![训练监控](Image/image-10.png)
 
 ##### 4.4 超参数调优与问题诊断策略
 
@@ -596,13 +596,13 @@ python process.py train-00000-of-00001.parquet
 
 点击项目的模型部署模块，新建部署任务。分别命名为“OpenVul-tuned”，点击部署配置的图标，进入配置页。
 
-![部署配置入口](image/image-11.png)
+![部署配置入口](Image/image-11.png)
 
 OpenVul-tuned，配置参数设置为使用单卡（CUDA_VISIBLE_DEVICES=1），设置检查点为训练步骤中的最佳检查点，设置最大上下文长度 8192、服务端口 8080、张量并行度为 2。
 
-![部署配置 3](image/image-14.png)   
+![部署配置 3](Image/image-14.png)   
 
-![部署配置 4](image/image-15.png)
+![部署配置 4](Image/image-15.png)
 
 **参数说明**
 
@@ -649,7 +649,7 @@ OpenVul-tuned，配置参数设置为使用单卡（CUDA_VISIBLE_DEVICES=1），
 - **参数说明**: 详见第 5.1.4-5.1.6 节
 - **经验参考**: 
 
-![训练部署界面](image/image.png)
+![训练部署界面](Image/image.png)
 
 ---
 
@@ -661,8 +661,8 @@ OpenVul-tuned，配置参数设置为使用单卡（CUDA_VISIBLE_DEVICES=1），
 - **文档参考**: 第 5.1.8-5.1.10 节
 - **MCP 扩展**:  第 2.1.5 节
 
-![智能体界面 1](image/image-1.png)
-![智能体界面 2](image/image-2.png)
+![智能体界面 1](Image/image-1.png)
+![智能体界面 2](Image/image-2.png)
 
 ---
 
