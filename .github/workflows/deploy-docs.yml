@@ -3,52 +3,49 @@ name: huangxi-docs
 on:
   push:
     branches:
-      # 确保这是你正在使用的分支名称
       - master
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # 如果你文档需要 Git 子模块，取消注释下一行
-          # submodules: true
 
-      - name: 安装 pnpm
-        uses: pnpm/action-setup@v2
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
         with:
-          run_install: true
           version: 9
 
-      - name: 设置 Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: 'pnpm'
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 构建文档
+      - name: Build docs
         env:
           NODE_OPTIONS: --max_old_space_size=8192
         run: pnpm run build
-      # 垃圾action 还要算目录层级 文档也不写
-      - name: Deploy
-        uses: appleboy/scp-action@v0.1.3
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.USER_HOST }}
           username: ${{ secrets.USER_NAME }}
           password: ${{ secrets.USER_PASS }}
           port: 22
-          timeout: 120s
-          strip_components: 3
-          source: "./src/.vuepress/dist/**"
-          target: "/var/www/html"
-          overwrite: true
+          timeout: 60s
+          script: |
+            mkdir -p /var/www/html
+            rm -rf /var/www/html/*
+            cp -r ${{ github.workspace }}/src/.vuepress/dist/* /var/www/html/
