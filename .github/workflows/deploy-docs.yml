@@ -48,4 +48,4 @@ jobs:
           script: |
             mkdir -p /var/www/html
             rm -rf /var/www/html/*
-            cp -r ${{ github.workspace }}/src/.vuepress/dist/* /var/www/html/
+            cd ${{ github.workspace }}/src/.vuepress/dist && cp -r . /var/www/html/
