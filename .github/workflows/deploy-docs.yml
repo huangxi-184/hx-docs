@@ -37,6 +37,12 @@ jobs:
           NODE_OPTIONS: --max_old_space_size=8192
         run: pnpm run build
 
+      - name: Debug - check build output
+        run: |
+          echo "Workspace: ${{ github.workspace }}"
+          ls -la ${{ github.workspace }}/src/.vuepress/
+          ls -la ${{ github.workspace }}/src/.vuepress/dist/ | head -20
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -44,8 +50,8 @@ jobs:
           username: ${{ secrets.USER_NAME }}
           password: ${{ secrets.USER_PASS }}
           port: 22
-          timeout: 60s
+          timeout: 120s
           script: |
             mkdir -p /var/www/html
             rm -rf /var/www/html/*
-            cd ${{ github.workspace }}/src/.vuepress/dist && cp -r . /var/www/html/
+            cd "${{ github.workspace }}/src/.vuepress/dist" && cp -r . /var/www/html/
