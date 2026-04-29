@@ -30,19 +30,19 @@ export const zhNavbar = navbar([
       {
         text: 'Python',
         prefix: 'Python/',
-        children: ['python', 'init', 'ragflowDeply', 'deploy', 'record', 'readme']
+        children: ['python', 'init', 'ragflowDeply', 'deploy', 'record', 'readme', 'diff']
       },
       {
         text: '后端基础',
         prefix: 'Base/',
-        children: ['Koa', 'nest学习(一)', '全局模块和生命周期', '一网打尽 Nest 全部装饰器', 'HTTP缓存详解']
+        children: ['Koa', 'nest学习(一)', '全局模块和生命周期', '一网打尽 Nest 全部装饰器', 'HTTP缓存详解', 'node中的Event Loop']
       }
     ]
   },
   {
     text: '运维',
     prefix: '/Linux/',
-    children: ['nginx', 'nginx_use', 'pm2', 'docker']
+    children: ['nginx', 'nginx_use', 'pm2', 'docker', '常用指令', 'RagFlow部署']
   },
   {
     text: '算法',
@@ -51,14 +51,14 @@ export const zhNavbar = navbar([
       {
         text: '力扣',
         prefix: 'Leetcode/',
-        children: ['study_01']
+        children: ['study_01', 'study_02']
       }
     ]
   },
   {
     text: '备忘录',
     prefix: '/others/',
-    children: ['PMS开通账号', '保质期计算器', 'bilibiliBanner', 'NcmToMp3', '大屏展示']
+    children: ['PMS开通账号', '保质期计算器', 'bilibiliBanner', 'NcmToMp3', '大屏展示', '有趣的代码', '数据坐标最值和数据分段问题']
   },
   {
     text: 'Vercel项目',
