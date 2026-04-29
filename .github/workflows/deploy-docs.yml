@@ -5,6 +5,7 @@ on:
     branches:
       - master
   workflow_dispatch:
+    # 允许手动触发
 
 permissions:
   contents: read
@@ -18,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
@@ -27,7 +28,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -37,15 +38,15 @@ jobs:
           NODE_OPTIONS: --max_old_space_size=8192
         run: pnpm run build
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.0
+      - name: Deploy to server
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.USER_HOST }}
           username: ${{ secrets.USER_NAME }}
           password: ${{ secrets.USER_PASS }}
           port: 22
           timeout: 120s
-          script: |
-            mkdir -p /var/www/html
-            rm -rf /var/www/html/*
-            cd /home/runner/work/hx-docs/hx-docs/src/.vuepress/dist && cp -r . /var/www/html/
+          rm: true # ✅ 部署前先清空远程目录，避免残留旧文件
+          strip_components: 3 # 去掉 src/.vuepress/dist 这三层路径
+          source: "src/.vuepress/dist/**"
+          target: "/var/www/html"
