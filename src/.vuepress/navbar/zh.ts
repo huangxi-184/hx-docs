@@ -66,6 +66,11 @@ export const zhNavbar = navbar([
     children: ['/next-notes']
   },
   {
+    text: 'AI专栏',
+    prefix: '/AI/',
+    children: ['README']
+  },
+  {
     text: '常用链接',
     children: [
       {

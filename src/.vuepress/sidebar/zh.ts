@@ -32,6 +32,12 @@ export const zhSidebar = sidebar({
       icon: 'book',
       prefix: 'others/',
       children: 'structure'
+    },
+    {
+      text: 'AI',
+      icon: 'book',
+      prefix: 'AI/',
+      children: 'structure'
     }
   ]
 });
