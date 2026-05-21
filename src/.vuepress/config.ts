@@ -21,11 +21,11 @@ export default defineUserConfig({
       // 为分类和标签添加索引
       customFields: [
         {
-          getter: (page) => page.frontmatter.category,
+          getter: (page) => page.frontmatter.category as string | string[] | null,
           formatter: '分类：$content'
         },
         {
-          getter: (page) => page.frontmatter.tag,
+          getter: (page) => page.frontmatter.tag as string | string[] | null,
           formatter: '标签：$content'
         }
       ]
@@ -37,7 +37,8 @@ export default defineUserConfig({
         DataPanel: path.resolve(__dirname, './components/DataPanel.vue'),
         NcmToMp3: path.resolve(__dirname, './components/NcmToMp3.vue'),
         RichCard: path.resolve(__dirname, './components/RichCard.vue'),
-        RichCardGrid: path.resolve(__dirname, './components/RichCardGrid.vue')
+        RichCardGrid: path.resolve(__dirname, './components/RichCardGrid.vue'),
+        SingleByteSplitter: path.resolve(__dirname, './components/SingleByteSplitter.vue'),
       }
     })
   ],
