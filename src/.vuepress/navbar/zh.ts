@@ -35,7 +35,14 @@ export const zhNavbar = navbar([
       {
         text: '后端基础',
         prefix: 'Base/',
-        children: ['Koa', 'nest学习(一)', '全局模块和生命周期', '一网打尽 Nest 全部装饰器', 'HTTP缓存详解', 'node中的Event Loop']
+        children: [
+          'Koa',
+          'nest学习(一)',
+          '全局模块和生命周期',
+          '一网打尽 Nest 全部装饰器',
+          'HTTP缓存详解',
+          'node中的Event Loop'
+        ]
       }
     ]
   },
@@ -58,7 +65,18 @@ export const zhNavbar = navbar([
   {
     text: '备忘录',
     prefix: '/others/',
-    children: ['PMS开通账号', '保质期计算器', '单字节拆分器', 'bilibiliBanner', 'NcmToMp3', '大屏展示', '有趣的代码', '数据坐标最值和数据分段问题', '自动化脚本']
+    children: [
+      'PMS开通账号',
+      '保质期计算器',
+      '单字节拆分器',
+      'bilibiliBanner',
+      'NcmToMp3',
+      '大屏展示',
+      '有趣的代码',
+      '数据坐标最值和数据分段问题',
+      '掘金自动签到脚本',
+      '橘子每日签到'
+    ]
   },
   {
     text: 'AI专栏',
