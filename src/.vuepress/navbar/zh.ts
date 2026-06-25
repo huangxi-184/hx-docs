@@ -58,12 +58,7 @@ export const zhNavbar = navbar([
   {
     text: '备忘录',
     prefix: '/others/',
-    children: ['PMS开通账号', '保质期计算器', '单字节拆分器', 'bilibiliBanner', 'NcmToMp3', '大屏展示', '有趣的代码', '数据坐标最值和数据分段问题']
-  },
-  {
-    text: 'Vercel项目',
-    prefix: '/iframe',
-    children: ['/next-notes']
+    children: ['PMS开通账号', '保质期计算器', '单字节拆分器', 'bilibiliBanner', 'NcmToMp3', '大屏展示', '有趣的代码', '数据坐标最值和数据分段问题', '自动化脚本']
   },
   {
     text: 'AI专栏',
@@ -73,10 +68,6 @@ export const zhNavbar = navbar([
   {
     text: '常用链接',
     children: [
-      {
-        text: 'vuejs',
-        link: 'https://cn.vuejs.org/'
-      },
       {
         text: 'theme-hope',
         link: 'https://theme-hope.vuejs.press/zh/'
