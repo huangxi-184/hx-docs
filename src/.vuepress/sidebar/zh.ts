@@ -28,7 +28,7 @@ export const zhSidebar = sidebar({
       children: 'structure'
     },
     {
-      text: '备忘',
+      text: '百宝箱',
       icon: 'book',
       prefix: 'others/',
       children: 'structure'

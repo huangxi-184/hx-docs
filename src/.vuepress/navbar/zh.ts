@@ -63,7 +63,7 @@ export const zhNavbar = navbar([
     ]
   },
   {
-    text: '备忘录',
+    text: '百宝箱',
     prefix: '/others/',
     children: [
       'PMS开通账号',

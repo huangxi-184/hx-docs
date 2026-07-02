@@ -19,7 +19,7 @@ actions:
   - text: 刷题 💪
     link: ./algorithm/Leetcode/
 
-  - text: 备忘
+  - text: 百宝箱
     link: ./others/
 
 highlights:
