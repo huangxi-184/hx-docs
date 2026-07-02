@@ -39,6 +39,7 @@ export default defineUserConfig({
         RichCard: path.resolve(__dirname, './components/RichCard.vue'),
         RichCardGrid: path.resolve(__dirname, './components/RichCardGrid.vue'),
         SingleByteSplitter: path.resolve(__dirname, './components/SingleByteSplitter.vue'),
+        GasPriceChart: path.resolve(__dirname, './components/GasPriceChart.vue'),
       }
     })
   ],
