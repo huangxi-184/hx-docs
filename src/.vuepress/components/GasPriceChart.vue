@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import rawData from './lishiyoujia.json'
 
@@ -12,6 +12,32 @@ const parseData = () => {
 }
 
 const chartData = parseData()
+
+// 提取所有可用年份
+const availableYears = computed(() => {
+  const years = new Set<string>()
+  chartData.forEach(item => {
+    const year = item.date.substring(0, 4)
+    years.add(year)
+  })
+  return Array.from(years).sort()
+})
+
+// 当前选中的年份（null 表示全部）
+const selectedYear = ref<string | null>(null)
+
+// 根据选中年份过滤数据
+const filteredData = computed(() => {
+  if (!selectedYear.value) return chartData
+  return chartData.filter(item => item.date.startsWith(selectedYear.value!))
+})
+
+// 切换年份
+const setYear = (year: string | null) => {
+  selectedYear.value = year
+  updateChart()
+}
+
 const chartRef = ref<HTMLDivElement>()
 const wrapperRef = ref<HTMLDivElement>()
 let chartInstance: echarts.ECharts | null = null
@@ -44,9 +70,10 @@ const initChart = () => {
   chartInstance = echarts.init(chartRef.value)
 
   // 计算涨跌颜色标记
-  const colors = chartData.map((item, idx) => {
+  const currentData = filteredData.value
+  const colors = currentData.map((item, idx) => {
     if (idx === 0) return '#999'
-    const prev = chartData[idx - 1].price
+    const prev = currentData[idx - 1].price
     if (item.price > prev) return '#ef4444'   // 涨价 - 红色
     if (item.price < prev) return '#22c55e'   // 降价 - 绿色
     return '#999'                               // 持平 - 灰色
@@ -64,11 +91,11 @@ const initChart = () => {
         const item = params[0]
         if (!item) return ''
         const dataIndex = item.dataIndex
-        const d = chartData[dataIndex]
+        const d = currentData[dataIndex]
         // 计算涨跌
         let changeText = ''
         if (dataIndex > 0) {
-          const prev = chartData[dataIndex - 1].price
+          const prev = currentData[dataIndex - 1].price
           const diff = d.price - prev
           changeText = diff > 0
             ? `<span style="color:#ef4444">↑ +${diff.toFixed(2)} 元/升</span>`
@@ -90,7 +117,7 @@ const initChart = () => {
     },
     xAxis: {
       type: 'category',
-      data: chartData.map(d => d.date),
+      data: currentData.map(d => d.date),
       axisLabel: {
         rotate: 45,
         fontSize: 10,
@@ -153,7 +180,7 @@ const initChart = () => {
     series: [
       {
         type: 'line',
-        data: chartData.map((d, idx) => ({
+        data: currentData.map((d, idx) => ({
           value: d.price,
           itemStyle: {
             color: colors[idx]
@@ -222,6 +249,14 @@ const initChart = () => {
   chartInstance.setOption(option)
 }
 
+// 更新图表（用于切换年份）
+const updateChart = () => {
+  if (chartInstance) {
+    chartInstance.dispose()
+  }
+  initChart()
+}
+
 // 监听暗色模式切换
 const observer = new MutationObserver(() => {
   if (chartInstance) {
@@ -259,24 +294,44 @@ const handleResize = () => {
       <div class="chart-header-left">
         <h3>⛽ 安徽 95# 汽油历史价格走势</h3>
         <span class="chart-subtitle">
-          {{ chartData[0]?.date }} — {{ chartData[chartData.length - 1]?.date }}
-          <span class="count">（共 {{ chartData.length }} 期）</span>
+          {{ filteredData[0]?.date }} — {{ filteredData[filteredData.length - 1]?.date }}
+          <span class="count">（共 {{ filteredData.length }} 期）</span>
         </span>
       </div>
-      <button class="fullscreen-btn" @click="toggleFullscreen" :title="isFullscreen ? '退出全屏 (ESC)' : '全屏查看'">
-        <svg v-if="!isFullscreen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-          <polyline points="15 3 21 3 21 9"></polyline>
-          <polyline points="9 21 3 21 3 15"></polyline>
-          <line x1="21" y1="3" x2="14" y2="10"></line>
-          <line x1="3" y1="21" x2="10" y2="14"></line>
-        </svg>
-        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-          <polyline points="4 14 10 14 10 20"></polyline>
-          <polyline points="20 10 14 10 14 4"></polyline>
-          <line x1="14" y1="10" x2="21" y2="3"></line>
-          <line x1="10" y1="14" x2="3" y2="21"></line>
-        </svg>
-      </button>
+      <div class="chart-header-right">
+        <div class="year-filter">
+          <button
+            class="year-btn"
+            :class="{ active: selectedYear === null }"
+            @click="setYear(null)"
+          >
+            全部
+          </button>
+          <button
+            v-for="year in availableYears"
+            :key="year"
+            class="year-btn"
+            :class="{ active: selectedYear === year }"
+            @click="setYear(year)"
+          >
+            {{ year }}
+          </button>
+        </div>
+        <button class="fullscreen-btn" @click="toggleFullscreen" :title="isFullscreen ? '退出全屏 (ESC)' : '全屏查看'">
+          <svg v-if="!isFullscreen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <polyline points="4 14 10 14 10 20"></polyline>
+            <polyline points="20 10 14 10 14 4"></polyline>
+            <line x1="14" y1="10" x2="21" y2="3"></line>
+            <line x1="10" y1="14" x2="3" y2="21"></line>
+          </svg>
+        </button>
+      </div>
     </div>
     <div ref="chartRef" class="chart-container"></div>
   </div>
@@ -331,6 +386,43 @@ const handleResize = () => {
   opacity: 0.7;
 }
 
+.chart-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.year-filter {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.year-btn {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  border: 1px solid var(--vp-c-border, #e2e8f0);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--vp-c-text-muted, #64748b);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.year-btn:hover {
+  background: var(--vp-c-bg-mute, #f1f5f9);
+  color: var(--vp-c-text, #1e293b);
+  border-color: var(--vp-c-text-muted, #94a3b8);
+}
+
+.year-btn.active {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
 .fullscreen-btn {
   flex-shrink: 0;
   display: flex;
@@ -344,7 +436,6 @@ const handleResize = () => {
   color: var(--vp-c-text-muted, #64748b);
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 2px;
 }
 
 .fullscreen-btn:hover {
@@ -370,5 +461,15 @@ const handleResize = () => {
 
 :root.dark .gas-price-chart.is-fullscreen {
   background: var(--vp-c-bg, #0f172a);
+}
+
+:root.dark .year-btn {
+  border-color: var(--vp-c-border, #334155);
+}
+
+:root.dark .year-btn:hover {
+  background: var(--vp-c-bg-mute, #1e293b);
+  color: var(--vp-c-text, #e2e8f0);
+  border-color: var(--vp-c-text-muted, #475569);
 }
 </style>
