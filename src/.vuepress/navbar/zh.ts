@@ -61,7 +61,7 @@ export const zhNavbar = navbar([
         children: ['study_01', 'study_02']
       },
       {
-        text: '力扣',
+        text: '软考',
         prefix: 'exam/',
         children: ['软考刷题.md']
       }
