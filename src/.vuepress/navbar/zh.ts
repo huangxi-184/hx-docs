@@ -59,6 +59,11 @@ export const zhNavbar = navbar([
         text: '力扣',
         prefix: 'Leetcode/',
         children: ['study_01', 'study_02']
+      },
+      {
+        text: '力扣',
+        prefix: 'exam/',
+        children: ['软考刷题.md']
       }
     ]
   },
