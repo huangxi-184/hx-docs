@@ -13,19 +13,19 @@ tag:
 
 Docker 的安装和一些常用操作的基本指南
 
-### 安装 Docker
+## 安装 Docker
 
 ### Docker 的自动化安装
 
 Docker 官方和国内 daocloud 都提供了一键安装的脚本，使得 Docker 的安装更加便捷。
 
-## 官方的一键安装方式：
+#### 官方的一键安装方式
 
 ```bash
 curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
 ```
 
-## 国内 daocloud 一键安装命令：
+#### 国内 daocloud 一键安装命令
 
 ```bash
 curl -sSL https://get.daocloud.io/docker | sh

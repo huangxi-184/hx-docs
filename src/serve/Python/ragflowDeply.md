@@ -410,7 +410,7 @@ sudo npm run build && sudo rm -rf /var/www/html/* && sudo cp -r /home/test/llm-s
 
 ### ⚙️ 3. 配置 Nginx
 
-编辑并配置 `nginx.conf` 文件（[nginx.conf](/nginx.conf)）。
+编辑并配置 `nginx.conf` 文件。
 确认 `root` 指向前端构建产物目录（通常为 `dist`）。
 配置完成后，启动 Nginx 即可完成部署。
 

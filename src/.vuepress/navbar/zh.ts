@@ -10,7 +10,6 @@ export const zhNavbar = navbar([
       '/css',
       '/JavaScript',
       '/project',
-      '/小程序',
       '/TypeScript',
       '/vue',
       '/React',
