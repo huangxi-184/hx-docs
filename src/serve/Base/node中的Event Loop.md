@@ -14,7 +14,7 @@ tag:
 
 Node.js 中的事件循环与浏览器中的不同。Node.js 的事件循环分为 6 个阶段，会按照顺序反复执行。每当进入某一个阶段时，都会从对应的回调队列中取出函数去执行。
 
-![Node Event Loop](image-7.png)
+![Node Event Loop](image-7.webp)
 
 ## 6 个阶段
 

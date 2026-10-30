@@ -21,15 +21,15 @@ DefaultValuePipe。
 
 自己写一个自定义的 pipe. 
 
-![Alt text](image.png)
+![Alt text](image.webp)
 
 type 就是 @Query、@Param、@Body 装饰器，或者自定义装饰器： 
 
-![Alt text](image-1.png)
+![Alt text](image-1.webp)
 
 而 metatype 是参数的 ts 类型： 
 
-![Alt text](image-2.png)
+![Alt text](image-2.webp)
 
 data 是传给 @Query、@Param、@Body 等装饰器的参数。
 

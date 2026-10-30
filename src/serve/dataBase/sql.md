@@ -11,7 +11,7 @@ tag:
 当涉及到后端开发时，主要任务包括从数据库中检索数据并将其返回给前端进行渲染，以及将前端提交的数据存储到数据库中。MySQL 作
 为数据库管理系统，分为后台守护进程和客户端两个方面。
 
-![Alt text](image.png)
+![Alt text](image.webp)
 
 ### 后端主要任务：
 
@@ -236,12 +236,12 @@ select column1 as huangxi from table_name as haungxi_table
 ```sql
 select avg(score) as '平均成绩',count(*) as '人数',sum(score) as '总成绩',min(score) as '最低分', max(score) as '最高分' from student 
 ```
-![Alt text](image-1.png)
+![Alt text](image-1.webp)
 字符串函数：用于对字符串的处理，比如 CONCAT、SUBSTR、LENGTH、UPPER、LOWER。
 ```sql
 SELECT CONCAT('xx', name, 'yy'), SUBSTR(name,2,3), LENGTH(name), UPPER('aa'), LOWER('TT') FROM student;
 ```
-![Alt text](image-2.png)
+![Alt text](image-2.webp)
 数值函数：用于对数值的处理，比如 ROUND、CEIL、FLOOR、ABS、MOD。
 ```sql
 SELECT ROUND(1.234567, 2), CEIL(1.234567), FLOOR(1.234567), ABS(-1.234567), MOD(5, 2);
@@ -249,7 +249,7 @@ SELECT ROUND(1.234567, 2), CEIL(1.234567), FLOOR(1.234567), ABS(-1.234567), MOD(
 分别是 ROUND 四舍五入、CEIL 向上取整、FLOOR 向下取整、ABS 绝对值、MOD 取模。
 
 日期函数：对日期、时间进行处理，比如 DATE、TIME、YEAR、MONTH、DAY
-![Alt text](image-3.png)
+![Alt text](image-3.webp)
 条件函数：根据条件是否成立返回不同的值，比如 IF、CASE
 if 函数适合单个条件，case 适合多个条件。
 ```sql
@@ -259,7 +259,7 @@ SELECT name, score, CASE WHEN score >=90 THEN '优秀' WHEN score >=60 THEN '良
 
 ```
 系统函数：用于获取系统信息，比如 VERSION、DATABASE、USER。
-![Alt text](image-4.png)
+![Alt text](image-4.webp)
 其他函数：NULLIF、COALESCE、GREATEST、LEAST。
 
 NULLIF：如果相等返回 null，不相等返回第一个值。

@@ -20,7 +20,7 @@ Nginx 是流行的服务器，一般用于对静态资源做托管、对动态�
 
 虚拟主机就是可以用一台 Nginx 服务器为多个域名和端口提供服务。只需要添加多个 `server` 配置就可以实现。
 
-![Nginx Virtual Hosts](image.png)
+![Nginx Virtual Hosts](image.webp)
 
 下面的 `location` 就是路由配置。
 
@@ -34,7 +34,7 @@ location = /111/ {
 }
 ```
 
-![精准匹配](image-2.png)
+![精准匹配](image-2.webp)
 
 更多的 `location` 配置：
 
@@ -98,7 +98,7 @@ location /222 {
 
 ### 反向代理实现
 
-1. 添加一个全局的前缀 `/api` ![反向代理](image-3.png)
+1. 添加一个全局的前缀 `/api` ![反向代理](image-3.webp)
 
 2. 改下 Nginx 配置，添加个路由：
 
@@ -110,7 +110,7 @@ location ^~ /api {
 
 为什么这么做？Nginx 反向代理可以修改请求、响应信息，比如设置 header。还可以用它实现负载均衡。
 
-改下 Nginx 配置文件： ![负载均衡](image-4.png)
+改下 Nginx 配置文件： ![负载均衡](image-4.webp)
 
 在 `upstream` 里配置它代理的目标服务器的所有实例。下面 `proxy_pass` 通过 `upstream` 的名字来指定。
 
@@ -121,7 +121,7 @@ location ^~ /api {
 - ip_hash：按照 IP 的 hash 分配，保证每个访客的请求固定访问一个服务器，解决 session 问题。
 - fair：按照响应时间来分配，这个需要安装 `nginx-upstream-fair` 插件。
 
-![Nginx 负载均衡](image-5.png) ![Nginx 负载均衡 Fair](image-6.png)
+![Nginx 负载均衡](image-5.webp) ![Nginx 负载均衡 Fair](image-6.webp)
 
 
 ### 使用 nginx 处理跨域

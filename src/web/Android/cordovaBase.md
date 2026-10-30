@@ -16,7 +16,7 @@ tag:
 ### Cordova简介
 Adobe把PhoneGap的核心代码贡献给了Apache软件基金会，但保留了PhoneGap的商标所有权。Apache将PhoneGap核心代码命名为Apache Callback项目，后又更 名为Apache Cordova。
 cordova是一个开源的移动(`webview`)开发框架。允许你用标准的web技术-HTML5,CSS3和JavaScript做跨平台（android、ios、windows等）开发。应用在每个平台的具体执行被封装了起来，并依靠符合标准的API绑定去访问每个设备的功能，比如说：传感器、数据、网络状态。
-![alt text](image-1.png)
+![alt text](image-1.webp)
 **整个cordova包含三部分：web app、webview和plugins。 其中web app是可以自己开发的web代码，webview是针对每个平台开发的浏览器引擎，plugins是cordova针对手机硬件（如相机、电池、存储等）解耦出来的插件组合。**
 
 
@@ -88,7 +88,7 @@ function onBatteryStatus(status) {
 
 
 ### cordova事件
-![alt text](image-0.png)
+![alt text](image-0.webp)
 各平台支持的事件如上表：
 `Deviceready`:  cordova api全部加载完毕以后触发该事件，只有该事件触发后，调用api才是安全的。
 `Pause`: 后台挂起事件

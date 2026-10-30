@@ -136,7 +136,7 @@ inventions: 5 }。因此，为了能在 JSX 中传递，你必须用另一对额
 你可能在 JSX 的内联 CSS 样式中就已经见过这种写法了。React 不要求你使用内联样式（使用 CSS 类就能满足大部分情况）。但是当
 你需要内联样式的时候，你可以给 style 属性传递一个对象：
 
-![Alt text](image.png)
+![Alt text](image.webp)
 
 ### 给 prop 指定一个默认值
 
