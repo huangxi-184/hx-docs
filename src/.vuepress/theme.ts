@@ -55,43 +55,41 @@ export default hopeTheme({
 
   plugins: {
     mdEnhance: {
+      // —— 保留：实际在用的 ——
       align: true,
       attrs: true,
-      chart: true,
-      codetabs: true,
-      demo: true,
-      echarts: true,
       figure: true,
-      flowchart: true,
       gfm: true,
       imgLazyload: true,
       imgSize: true,
-      include: true,
-      katex: true,
+      katex: true, // serve/dataBase/sql.md 有一处行内公式 $A∩B$
       mark: true,
-      mermaid: true,
-      playground: {
-        presets: ['ts', 'vue']
-      },
-      presentation: ['highlight', 'math', 'search', 'notes', 'zoom'],
-      stylize: [
-        {
-          matcher: 'Recommended',
-          replacer: ({ tag }) => {
-            if (tag === 'em')
-              return {
-                tag: 'Badge',
-                attrs: { type: 'tip' },
-                content: 'Recommended'
-              };
-          }
-        }
-      ],
+      mermaid: true, // serve/Python/ragflowDeply.md 有一处流程图
       sub: true,
       sup: true,
-      tabs: true,
-      vPre: true,
-      vuePlayground: true
+      vPre: true
+
+      // —— 关闭：全站 0 处使用，且会引入大体积依赖（2026-10-30 实测）——
+      // chart / echarts     → 0 处 ::: echarts / ::: chart 容器
+      // flowchart           → 0 处，且会打包 flowchart-elk 布局器（1.3MB）
+      // presentation        → 0 处，且会引入 reveal.js + 约 1MB 字体
+      // playground          → 0 处，且会引入 vue-repl + codemirror（约 1.2MB）
+      // vuePlayground       → 0 处
+      // demo                → 0 处 ::: demo 容器
+      // tabs / codetabs     → 0 处 ::: tabs 容器
+      // include             → 0 处 @include()
+      // stylize             → 0 处 *Recommended*
+      // chart: true,
+      // codetabs: true,
+      // demo: true,
+      // echarts: true,
+      // flowchart: true,
+      // include: true,
+      // playground: { presets: ['ts', 'vue'] },
+      // presentation: ['highlight', 'math', 'search', 'notes', 'zoom'],
+      // stylize: [...],
+      // tabs: true,
+      // vuePlayground: true
     }
   }
 });

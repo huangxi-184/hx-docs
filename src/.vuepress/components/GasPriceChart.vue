@@ -1,7 +1,46 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import * as echarts from 'echarts'
+import { init, use, graphic } from 'echarts/core'
+import { LineChart } from 'echarts/charts'
+import {
+  GridComponent,
+  TooltipComponent,
+  DataZoomComponent,
+  MarkLineComponent,
+  MarkPointComponent
+} from 'echarts/components'
+import { CanvasRenderer } from 'echarts/renderers'
+// echarts 6 把 grid.containLabel 拆成了遗留特性，完整包会在入口自动 use；
+// 按需引入必须显式注册，否则 containLabel 不生效、坐标轴标签会被裁掉
+import { LabelLayout, LegacyGridContainLabel } from 'echarts/features'
+import type { ComposeOption, EChartsType } from 'echarts/core'
+import type { LineSeriesOption } from 'echarts/charts'
+import type {
+  DataZoomComponentOption,
+  GridComponentOption,
+  TooltipComponentOption
+} from 'echarts/components'
 import rawData from './lishiyoujia.json'
+
+// 按需注册：只引入本图表用到的图表类型与组件，避免打包整个 echarts
+use([
+  LineChart,
+  GridComponent,
+  TooltipComponent,
+  DataZoomComponent,
+  MarkLineComponent,
+  MarkPointComponent,
+  CanvasRenderer,
+  LabelLayout,
+  LegacyGridContainLabel
+])
+
+type GasChartOption = ComposeOption<
+  | LineSeriesOption
+  | GridComponentOption
+  | TooltipComponentOption
+  | DataZoomComponentOption
+>
 
 // 解析数据：提取日期和数值价格
 const parseData = () => {
@@ -40,7 +79,7 @@ const setYear = (year: string | null) => {
 
 const chartRef = ref<HTMLDivElement>()
 const wrapperRef = ref<HTMLDivElement>()
-let chartInstance: echarts.ECharts | null = null
+let chartInstance: EChartsType | null = null
 const isFullscreen = ref(false)
 
 const toggleFullscreen = () => {
@@ -67,7 +106,7 @@ const initChart = () => {
 
   const isDark = document.documentElement.classList.contains('dark')
 
-  chartInstance = echarts.init(chartRef.value)
+  chartInstance = init(chartRef.value)
 
   // 计算涨跌颜色标记
   const currentData = filteredData.value
@@ -79,7 +118,7 @@ const initChart = () => {
     return '#999'                               // 持平 - 灰色
   })
 
-  const option: echarts.EChartsOption = {
+  const option: GasChartOption = {
     tooltip: {
       trigger: 'axis',
       backgroundColor: isDark ? '#1e293b' : '#fff',
@@ -192,7 +231,7 @@ const initChart = () => {
           color: '#3b82f6'
         },
         areaStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          color: new graphic.LinearGradient(0, 0, 0, 1, [
             { offset: 0, color: isDark ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.15)' },
             { offset: 1, color: isDark ? 'rgba(59, 130, 246, 0.02)' : 'rgba(59, 130, 246, 0.02)' }
           ])

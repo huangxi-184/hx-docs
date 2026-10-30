@@ -33,7 +33,35 @@
 </template>
 
 <script>
-import './decrypt.js';
+// decrypt.js 是 1.2MB 的 UMD bundle（内含大量 Node polyfill 与编码码表），
+// 只在点击后才用得到，所以放在 public/vendor 由脚本按需加载：
+// 既不会进主包、不会被打进 prefetch，也避免了 rollup 对其中 eval 的告警。
+const DECRYPT_SRC = '/vendor/decrypt.js'
+let decryptPromise = null
+
+const loadDecrypt = () => {
+  if (window.decrypt) return Promise.resolve(window.decrypt)
+  if (decryptPromise) return decryptPromise
+  decryptPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.src = DECRYPT_SRC
+    script.async = true
+    script.onload = () => {
+      if (window.decrypt) resolve(window.decrypt)
+      else {
+        decryptPromise = null
+        reject(new Error('解密引擎加载完成但未就绪'))
+      }
+    }
+    script.onerror = () => {
+      decryptPromise = null
+      reject(new Error('解密引擎加载失败，请检查网络后重试'))
+    }
+    document.head.appendChild(script)
+  })
+  return decryptPromise
+}
+
 export default {
   name: 'NcmConverter',
   data() {
@@ -56,7 +84,7 @@ export default {
         this.progress = 0;
         this.files = [];
 
-        // 选择源目录
+        // 选择源目录（必须直接响应用户手势，不能先 await 别的异步操作，否则会丢手势）
         const dirHandle = await window.showDirectoryPicker();
 
         // 收集所有.ncm文件
@@ -65,9 +93,15 @@ export default {
 
         this.statusMessage = `找到 ${ncmFiles.length} 个NCM文件，开始解码...`;
 
+        // 确认有文件要处理，才去拉解密引擎（1.2MB），并让它与下一步选目录并行
+        const decryptReady = ncmFiles.length ? loadDecrypt() : Promise.resolve(null);
+
         // 选择目标目录
         this.statusMessage = '请选择保存MP3的文件夹...';
         const saveDirHandle = await window.showDirectoryPicker();
+
+        this.statusMessage = '正在加载解密引擎...';
+        const decryptLib = await decryptReady;
 
         // 处理文件
         for (let i = 0; i < ncmFiles.length; i++) {
@@ -77,7 +111,7 @@ export default {
 
           try {
             const ncmFile = await file.handle.getFile();
-            const mp3Blob = await decrypt.Decrypt(ncmFile);
+            const mp3Blob = await decryptLib.Decrypt(ncmFile);
             const mp3Filename = file.handle.name.replace(/\.ncm$/i, '.mp3');
             const mp3FileHandle = await saveDirHandle.getFileHandle(mp3Filename, { create: true });
             const writable = await mp3FileHandle.createWritable();
