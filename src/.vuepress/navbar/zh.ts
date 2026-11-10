@@ -86,7 +86,7 @@ export const zhNavbar = navbar([
   {
     text: 'AI专栏',
     prefix: '/AI/',
-    children: ['README']
+    children: ['README', 'Dify']
   },
   {
     text: '常用链接',
