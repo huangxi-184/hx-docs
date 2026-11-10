@@ -5,12 +5,23 @@
       {{ isProcessing ? '处理中...' : '选择源文件夹' }}
     </button>
 
+    <label class="opt-row">
+      <input type="checkbox" v-model="forceOverwrite" :disabled="isProcessing" />
+      强制重新转换全部文件（忽略已存在的 MP3）
+    </label>
+
     <div class="status" :class="{ 'status-error': hasError }">
       <span v-if="hasError" class="error-icon">✗</span>
       <span v-else class="success-icon">✓</span>
       {{ statusMessage }}
       <div v-if="showProgress" class="progress-container">
         <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+      </div>
+      <div v-if="summary.total" class="summary">
+        <span>共 {{ summary.total }} 个</span>
+        <span class="ok">已转换 {{ summary.converted }}</span>
+        <span class="skip">已跳过 {{ summary.skipped }}</span>
+        <span v-if="summary.failed" class="bad">失败 {{ summary.failed }}</span>
       </div>
     </div>
 
@@ -20,10 +31,14 @@
         <li v-for="(file, index) in files" :key="index" :class="file.status">
           <span v-if="file.status === 'success'" class="success-icon">✓</span>
           <span v-else-if="file.status === 'error'" class="error-icon">✗</span>
+          <span v-else-if="file.status === 'skipped'" class="skip-icon">↷</span>
           <span v-else>•</span>
           {{ file.path }}
           <span v-if="file.status === 'success'"
             >→ <strong>{{ file.outputName }}</strong></span
+          >
+          <span v-else-if="file.status === 'skipped'" class="skip-note"
+            >→ {{ file.skipReason }}</span
           >
           <span v-if="file.status === 'error'">处理失败: {{ file.error }}</span>
         </li>
@@ -62,102 +77,206 @@ const loadDecrypt = () => {
   return decryptPromise
 }
 
+const toMp3Name = (name) => name.replace(/\.ncm$/i, '.mp3')
+
 export default {
   name: 'NcmConverter',
   data() {
     return {
       isProcessing: false,
       hasError: false,
+      forceOverwrite: false,
       statusMessage: '准备就绪，请选择包含NCM文件的文件夹',
       showProgress: false,
       progress: 0,
-      files: []
+      files: [],
+      summary: { total: 0, converted: 0, skipped: 0, failed: 0 }
     };
   },
   methods: {
+    resetState() {
+      this.hasError = false;
+      this.statusMessage = '正在扫描文件夹...';
+      this.showProgress = true;
+      this.progress = 0;
+      this.files = [];
+      this.summary = { total: 0, converted: 0, skipped: 0, failed: 0 };
+    },
+
     async handlePickFolder() {
+      if (typeof window.showDirectoryPicker !== 'function') {
+        this.hasError = true;
+        this.statusMessage = '当前浏览器不支持文件系统访问 API，请使用 Chrome / Edge 86 及以上版本';
+        return;
+      }
+
       try {
         this.isProcessing = true;
-        this.hasError = false;
-        this.statusMessage = '正在扫描文件夹...';
-        this.showProgress = true;
-        this.progress = 0;
-        this.files = [];
+        this.resetState();
 
         // 选择源目录（必须直接响应用户手势，不能先 await 别的异步操作，否则会丢手势）
-        const dirHandle = await window.showDirectoryPicker();
+        // id 让浏览器记住上次选择的位置，第二次直接回到同一个仓库目录
+        const dirHandle = await window.showDirectoryPicker({ id: 'ncm-source', mode: 'read' });
 
-        // 收集所有.ncm文件
+        // 收集所有 .ncm 文件
         const ncmFiles = [];
         await this.processDirectory(dirHandle, ncmFiles, '');
 
-        this.statusMessage = `找到 ${ncmFiles.length} 个NCM文件，开始解码...`;
+        if (!ncmFiles.length) {
+          this.showProgress = false;
+          this.statusMessage = '所选文件夹中没有找到 NCM 文件';
+          return;
+        }
 
-        // 确认有文件要处理，才去拉解密引擎（1.2MB），并让它与下一步选目录并行
-        const decryptReady = ncmFiles.length ? loadDecrypt() : Promise.resolve(null);
+        this.summary.total = ncmFiles.length;
+        this.statusMessage = `找到 ${ncmFiles.length} 个 NCM 文件，请选择保存 MP3 的文件夹...`;
 
-        // 选择目标目录
-        this.statusMessage = '请选择保存MP3的文件夹...';
-        const saveDirHandle = await window.showDirectoryPicker();
+        // 解密引擎与“用户选目录 + 比对已有文件”并行下载，省掉等待时间
+        // 注意：先挂一个空 catch，避免用户取消第二次选目录时解密 Promise 变成未处理的 rejection
+        const decryptReady = loadDecrypt();
+        decryptReady.catch(() => {});
 
-        this.statusMessage = '正在加载解密引擎...';
+        const saveDirHandle = await window.showDirectoryPicker({ id: 'ncm-target', mode: 'readwrite' });
+
+        // 防呆：两个仓库选成同一个目录时，MP3 会混进 NCM 仓库，直接中止
+        if (await this.isSameDir(dirHandle, saveDirHandle)) {
+          this.hasError = true;
+          this.statusMessage = '目标文件夹与源文件夹相同，请分别选择 NCM 仓库和 MP3 仓库';
+          return;
+        }
+
+        // 一次性建立目标目录索引：已存在的文件不再解密、不再写盘
+        this.statusMessage = '正在比对目标文件夹中已有的 MP3...';
+        const existing = this.forceOverwrite ? new Map() : await this.indexDirectory(saveDirHandle);
+
+        const todo = [];
+        const planned = new Set();
+
+        for (const file of ncmFiles) {
+          const mp3Name = toMp3Name(file.handle.name);
+          const key = mp3Name.toLowerCase();
+
+          if (planned.has(key)) {
+            this.markSkipped(file, '存在同名歌曲，本批次只转换第一个');
+            continue;
+          }
+          planned.add(key);
+
+          if (!this.forceOverwrite && existing.has(key)) {
+            const existed = await this.isRealFile(existing.get(key));
+            if (existed) {
+              this.markSkipped(file, '已存在，跳过');
+              continue;
+            }
+          }
+
+          todo.push({ ...file, mp3Name });
+        }
+
+        if (!todo.length) {
+          this.progress = 100;
+          this.showProgress = false;
+          this.statusMessage = `全部 ${ncmFiles.length} 个文件均已存在，无需转换`;
+          return;
+        }
+
+        this.statusMessage = this.forceOverwrite
+          ? `开始重新转换 ${todo.length} 个文件...`
+          : `需要转换 ${todo.length} 个文件（跳过 ${this.summary.skipped} 个已存在）...`;
+
         const decryptLib = await decryptReady;
 
-        // 处理文件
-        for (let i = 0; i < ncmFiles.length; i++) {
-          const file = ncmFiles[i];
-          this.progress = (i / ncmFiles.length) * 100;
-          this.statusMessage = `正在处理: ${file.path} (${i + 1}/${ncmFiles.length})`;
+        for (let i = 0; i < todo.length; i++) {
+          const item = todo[i];
+          this.progress = (i / todo.length) * 100;
+          this.statusMessage = `正在处理: ${item.path} (${i + 1}/${todo.length})`;
 
           try {
-            const ncmFile = await file.handle.getFile();
+            const ncmFile = await item.handle.getFile();
             const mp3Blob = await decryptLib.Decrypt(ncmFile);
-            const mp3Filename = file.handle.name.replace(/\.ncm$/i, '.mp3');
-            const mp3FileHandle = await saveDirHandle.getFileHandle(mp3Filename, { create: true });
+            const mp3FileHandle = await saveDirHandle.getFileHandle(item.mp3Name, { create: true });
             const writable = await mp3FileHandle.createWritable();
             await writable.write(mp3Blob.blob);
             await writable.close();
 
-            this.files.push({
-              path: file.path,
-              outputName: mp3Filename,
+            this.files[item.listIndex] = {
+              path: item.path,
+              outputName: item.mp3Name,
               status: 'success'
-            });
+            };
+            this.summary.converted++;
           } catch (err) {
-            console.error(`文件处理失败: ${file.path}`, err);
-            this.files.push({
-              path: file.path,
+            console.error(`文件处理失败: ${item.path}`, err);
+            this.files[item.listIndex] = {
+              path: item.path,
               error: err.message,
               status: 'error'
-            });
+            };
+            this.summary.failed++;
           }
         }
 
-        this.statusMessage = `已完成 ${ncmFiles.length} 个NCM文件的解码和保存`;
         this.progress = 100;
+        const parts = [`转换 ${this.summary.converted} 个`];
+        if (this.summary.skipped) parts.push(`跳过 ${this.summary.skipped} 个已存在`);
+        if (this.summary.failed) parts.push(`失败 ${this.summary.failed} 个`);
+        this.statusMessage = `处理完成：共 ${this.summary.total} 个文件，${parts.join('，')}`;
+        this.hasError = this.summary.failed > 0 && this.summary.converted === 0;
       } catch (err) {
         if (err.name !== 'AbortError') {
           console.error('操作失败:', err);
           this.hasError = true;
           this.statusMessage = `错误: ${err.message}`;
+        } else {
+          this.statusMessage = '已取消操作';
         }
       } finally {
         this.isProcessing = false;
       }
     },
 
+    /**
+     * 建立目标目录的文件名索引（key 统一小写，规避 Windows/macOS 大小写不敏感导致的重复文件）
+     * 一次遍历即可，避免对每个待转文件单独做一次存在性探测
+     */
+    async indexDirectory(handle) {
+      const map = new Map();
+      for await (const [name, entry] of handle.entries()) {
+        if (entry.kind === 'file') map.set(name.toLowerCase(), entry);
+      }
+      return map;
+    },
+
+    async isSameDir(a, b) {
+      try {
+        return await a.isSameEntry(b);
+      } catch (err) {
+        return false;
+      }
+    },
+
+    // 0 字节文件视为上次写盘中断的残留，按“不存在”处理并重新转换
+    async isRealFile(entry) {
+      try {
+        const file = await entry.getFile();
+        return file.size > 0;
+      } catch (err) {
+        return false;
+      }
+    },
+
+    markSkipped(file, reason) {
+      this.summary.skipped++;
+      this.files[file.listIndex] = { path: file.path, status: 'skipped', skipReason: reason };
+    },
+
     async processDirectory(handle, fileList, path) {
       for await (const entry of handle.values()) {
         if (entry.kind === 'file' && entry.name.toLowerCase().endsWith('.ncm')) {
-          fileList.push({
-            handle: entry,
-            path: path ? `${path}/${entry.name}` : entry.name
-          });
-
-          this.files.push({
-            path: path ? `${path}/${entry.name}` : entry.name,
-            status: 'pending'
-          });
+          const displayPath = path ? `${path}/${entry.name}` : entry.name;
+          const listIndex = this.files.length;
+          this.files.push({ path: displayPath, status: 'pending' });
+          fileList.push({ handle: entry, path: displayPath, listIndex });
         } else if (entry.kind === 'directory') {
           await this.processDirectory(entry, fileList, path ? `${path}/${entry.name}` : entry.name);
         }
@@ -202,6 +321,23 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.opt-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+  font-size: 14px;
+  color: #495057;
+  cursor: pointer;
+  user-select: none;
+}
+
+.opt-row input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
 .status {
   margin: 20px 0;
   padding: 15px;
@@ -218,6 +354,28 @@ button:disabled {
   /* 更现代的红色 */
   background-color: #fff5f5;
   /* 错误状态浅红色背景 */
+}
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #495057;
+}
+
+.summary .ok {
+  color: #2b8a3e;
+}
+
+.summary .skip {
+  color: #868e96;
+}
+
+.summary .bad {
+  color: #ef233c;
 }
 
 .file-list {
@@ -250,6 +408,14 @@ button:disabled {
   align-items: center;
 }
 
+.file-list li.skipped {
+  color: #868e96;
+}
+
+.file-list li.error {
+  color: #ef233c;
+}
+
 .success-icon {
   color: #4cc9f0;
   /* 清新的蓝色 */
@@ -260,6 +426,16 @@ button:disabled {
   color: #ef233c;
   /* 与错误状态一致 */
   margin-right: 8px;
+}
+
+.skip-icon {
+  color: #adb5bd;
+  margin-right: 8px;
+}
+
+.skip-note {
+  margin-left: 8px;
+  font-size: 13px;
 }
 
 .progress-container {
