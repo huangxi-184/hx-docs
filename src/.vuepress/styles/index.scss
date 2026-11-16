@@ -1,1 +1,6 @@
 // place your custom styles here
+
+// 拓宽正文显示宽度（主题默认 780px，改这里即可调整）
+:root {
+  --content-width: 1000px;
+}

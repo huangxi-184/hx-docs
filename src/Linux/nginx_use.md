@@ -11,10 +11,7 @@ tag:
   - Nginx
 ---
 
-# Nginx 最主要的用法
-
-Nginx 是流行的服务器，一般用于对静态资源做托管、对动态资源做反向代理。只要放到 `/usr/share/nginx/html` 下的文件，都可以
-通过被访问到。我们来看下 Nginx 配置文件，也就是 `/etc/nginx/nginx.conf`（默认配置）。
+Nginx 是流行的服务器，一般用于对静态资源做托管、对动态资源做反向代理。只要放到 `/usr/share/nginx/html` 下的文件，都可以直接被访问到。我们来看下 Nginx 配置文件，也就是 `/etc/nginx/nginx.conf`（默认配置）。
 
 ## 什么是虚拟主机？
 
@@ -26,7 +23,7 @@ Nginx 是流行的服务器，一般用于对静态资源做托管、对动态�
 
 例如：
 
-```sh
+```nginx
 # location 和路径之间加了个 =，代表精准匹配，也就是只有完全相同的 URL 才会匹配这个路由。
 location = /111/ {
     default_type text/plain;
@@ -38,7 +35,7 @@ location = /111/ {
 
 更多的 `location` 配置：
 
-```sh
+```nginx
 # 不带 = 代表根据前缀匹配，后面可以是任意路径。这里的 $uri 是取当前路径。
 location /222 {
     default_type text/plain;
@@ -64,13 +61,13 @@ location ^~ /444 {
 }
 ```
 
-这 4 种语法的优先级是这样的：精确匹配（=） > 高优先级前缀匹配（^~） > 正则匹配（～ ~\*） > 普通前缀匹配
+这 4 种语法的优先级是：精确匹配（`=`） > 高优先级前缀匹配（`^~`） > 正则匹配（`~`、`~*`） > 普通前缀匹配。
 
 ## root 和 alias 的区别
 
 比如这样的两个配置：
 
-```sh
+```nginx
 location /222 {
     alias /dddd;
 }
@@ -80,17 +77,16 @@ location /222 {
 }
 ```
 
-同样是 `/222/xxx/yyy.html`，如果是用 `root` 的配置，会把整个 URI 作为路径拼接在后面。也就是会查找
-`/dddd/222/xxx/yyy.html` 文件。
+同样是 `/222/xxx/yyy.html`：
 
-如果是 `alias` 配置，它会把去掉 `/222` 之后的部分路径拼接在后面。也就是会查找 `/dddd/xxx/yyy.html` 文件。
+- 如果是用 `root` 的配置，会把整个 URI 作为路径拼接在后面，也就是会查找 `/dddd/222/xxx/yyy.html` 文件。
+- 如果是 `alias` 配置，它会把去掉 `/222` 之后的部分路径拼接在后面，也就是会查找 `/dddd/xxx/yyy.html` 文件。
 
-这就是 `root` 和 `alias` 的区别，拼接路径时是否包含匹配条件的路径。
+这就是 `root` 和 `alias` 的区别：拼接路径时是否包含匹配条件的路径。
 
 ## 配置文件位置
 
-主配置文件在 `/etc/nginx/nginx.conf`，而子配置文件在 `/etc/nginx/conf.d` 目录下。默认的 HTML 路径是
-`/usr/share/nginx/html`。
+主配置文件在 `/etc/nginx/nginx.conf`，而子配置文件在 `/etc/nginx/conf.d` 目录下。默认的 HTML 路径是 `/usr/share/nginx/html`。
 
 ## 正向代理与反向代理
 
@@ -98,21 +94,23 @@ location /222 {
 
 ### 反向代理实现
 
-1. 添加一个全局的前缀 `/api` ![反向代理](image-3.webp)
+1. 添加一个全局的前缀 `/api`：
+
+   ![反向代理](image-3.webp)
 
 2. 改下 Nginx 配置，添加个路由：
 
-```sh
-location ^~ /api {
-    proxy_pass http://192.168.1.6:3000;
-}
-```
+   ```nginx
+   location ^~ /api {
+       proxy_pass http://192.168.1.6:3000;
+   }
+   ```
 
-为什么这么做？Nginx 反向代理可以修改请求、响应信息，比如设置 header。还可以用它实现负载均衡。
+为什么这么做？Nginx 反向代理可以修改请求、响应信息，比如设置 header，还可以用它实现负载均衡。
 
-改下 Nginx 配置文件： ![负载均衡](image-4.webp)
+在 `upstream` 里配置它代理的目标服务器的所有实例，下面的 `proxy_pass` 通过 `upstream` 的名字来指定：
 
-在 `upstream` 里配置它代理的目标服务器的所有实例。下面 `proxy_pass` 通过 `upstream` 的名字来指定。
+![负载均衡](image-4.webp)
 
 ### 负载均衡策略
 
@@ -121,47 +119,48 @@ location ^~ /api {
 - ip_hash：按照 IP 的 hash 分配，保证每个访客的请求固定访问一个服务器，解决 session 问题。
 - fair：按照响应时间来分配，这个需要安装 `nginx-upstream-fair` 插件。
 
-![Nginx 负载均衡](image-5.webp) ![Nginx 负载均衡 Fair](image-6.webp)
+![Nginx 负载均衡](image-5.webp)
 
-
-### 使用 nginx 处理跨域
-
-使用 nginx 处理项目部署后的跨域问题
-1. 配置前端项目接口地址
-```sh
-# 在.env.production内，配置接口地址
-VITE_GLOB_API_URL=/api
-```
-
-2.在 nginx 配置请求转发到后台
-
-```sh
-
-server {
-  listen     80;
-  server_name  localhost;
-  # 接口代理，用于解决跨域问题
-  location /api {
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    # 后台接口地址
-    proxy_pass http://localhost:8080/api;
-    proxy_redirect default;
-    add_header Access-Control-Allow-Origin *;
-    add_header Access-Control-Allow-Headers X-Requested-With;
-    add_header Access-Control-Allow-Methods GET,POST,OPTIONS;
-  }
-}  
-```
+![Nginx 负载均衡 Fair](image-6.webp)
 
 ### 使用 nginx 处理跨域
 
-缓存hash文件不缓存html。保证每次加载都是最新的，推荐配置清单
+使用 nginx 处理项目部署后的跨域问题：
 
-生产环境推荐
+1. 配置前端项目接口地址：
 
-```sh
+   ```sh
+   # 在 .env.production 内，配置接口地址
+   VITE_GLOB_API_URL=/api
+   ```
+
+2. 在 nginx 配置请求转发到后台：
+
+   ```nginx
+   server {
+     listen     80;
+     server_name  localhost;
+
+     # 接口代理，用于解决跨域问题
+     location /api {
+       proxy_set_header Host $host;
+       proxy_set_header X-Real-IP $remote_addr;
+       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       # 后台接口地址
+       proxy_pass http://localhost:8080/api;
+       proxy_redirect default;
+       add_header Access-Control-Allow-Origin *;
+       add_header Access-Control-Allow-Headers X-Requested-With;
+       add_header Access-Control-Allow-Methods GET,POST,OPTIONS;
+     }
+   }
+   ```
+
+## 缓存策略配置
+
+缓存带 hash 的静态资源，html 不缓存，保证每次加载都是最新的。生产环境推荐配置：
+
+```nginx
 server {
     listen 80;
     server_name your.domain.com; # 替换为你的域名
@@ -200,4 +199,6 @@ server {
 }
 ```
 
-同时也要保证CDN的缓存策略统一.
+::: tip
+同时也要保证 CDN 的缓存策略与 nginx 配置统一，否则资源可能在 CDN 层被旧缓存命中。
+:::

@@ -62,8 +62,8 @@ const availableYears = computed(() => {
   return Array.from(years).sort()
 })
 
-// 当前选中的年份（null 表示全部）
-const selectedYear = ref<string | null>(null)
+// 当前选中的年份（null 表示全部），默认展示最新一年的数据
+const selectedYear = ref<string | null>(availableYears.value.at(-1) ?? null)
 
 // 根据选中年份过滤数据
 const filteredData = computed(() => {

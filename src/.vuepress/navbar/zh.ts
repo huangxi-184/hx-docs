@@ -48,7 +48,7 @@ export const zhNavbar = navbar([
   {
     text: '运维',
     prefix: '/Linux/',
-    children: ['nginx', 'nginx_use', 'pm2', 'docker', '常用指令', 'RagFlow部署']
+    children: ['nginx', 'nginx_use', 'pm2', 'docker', '常用指令']
   },
   {
     text: '算法',
