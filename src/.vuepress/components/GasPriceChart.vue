@@ -50,7 +50,14 @@ const parseData = () => {
   })).reverse() // 按时间升序（旧→新）
 }
 
-const chartData = parseData()
+// JSON 保留全量历史（2012 年起），图表只展示最近 N 个自然年，
+// 否则年份按钮会排成十几格、折线也会密到看不清
+const VISIBLE_YEARS = 5
+
+const allData = parseData()
+const latestYear = Number(allData.at(-1)?.date.slice(0, 4)) || new Date().getFullYear()
+const minVisibleYear = latestYear - VISIBLE_YEARS + 1
+const chartData = allData.filter(item => Number(item.date.slice(0, 4)) >= minVisibleYear)
 
 // 提取所有可用年份
 const availableYears = computed(() => {
@@ -62,8 +69,8 @@ const availableYears = computed(() => {
   return Array.from(years).sort()
 })
 
-// 当前选中的年份（null 表示全部），默认展示最新一年的数据
-const selectedYear = ref<string | null>(availableYears.value.at(-1) ?? null)
+// 当前选中的年份（null 表示整个可见窗口），默认展示近 5 年的完整走势
+const selectedYear = ref<string | null>(null)
 
 // 根据选中年份过滤数据
 const filteredData = computed(() => {
@@ -344,7 +351,7 @@ const handleResize = () => {
             :class="{ active: selectedYear === null }"
             @click="setYear(null)"
           >
-            全部
+            近{{ VISIBLE_YEARS }}年
           </button>
           <button
             v-for="year in availableYears"
