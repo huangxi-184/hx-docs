@@ -26,6 +26,17 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+
+			// 图层是 100% 宽的 flex 容器，子元素是超宽的整幅图（如 4833px）。
+			// 1) flex item 默认 flex-shrink: 1，会被压缩到容器宽度；
+			// 2) 主题对 img 全局设了 max-width: 100%，同样会夹到容器宽度。
+			// 两者都会让画面横向挤扁、相邻底图拼接处露出背景色。
+			// 这里保持图片真实尺寸，由 .animated-banner 的 overflow: hidden 负责裁切。
+			> * {
+				flex: 0 0 auto;
+				max-width: none;
+				max-height: none;
+			}
 		}
 	}
 
