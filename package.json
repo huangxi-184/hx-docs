@@ -5,10 +5,11 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "vuepress build src",
+    "build": "node scripts/sync-gas-price.mjs && vuepress build src",
     "clean-dev": "vuepress dev src --clean-cache",
     "delete": "rimraf node_modules",
     "dev": "vuepress dev src",
+    "sync-gas": "node scripts/sync-gas-price.mjs",
     "update-package": "pnpm dlx vp-update"
   },
   "devDependencies": {
